@@ -14,7 +14,7 @@ Tagline: *Nearer to Thee.*
 - **Member**: has an account, follows a church, gives, requests transfers. Becomes a *verified member* only after the clerk confirms them.
 - **Church admin**: clerk, treasurer, communication leader, and other officers. Multiple admins per church, with role-based permissions.
 - **Chorister of the day**: a member assigned in the weekly programme who gets temporary control of the live Song Service for that Sabbath only. Access ends when the session closes.
-- **Platform admin**: SabbathLink staff who verify churches before they go live.
+- **Platform admin**: SabbathLink staff who verify churches before they go live, and manage the platform and contact people through the platform admin panel (see below).
 
 ## Product principles
 
@@ -38,6 +38,34 @@ Build this first, and nothing from later phases until Phase 1 is in use by pilot
 - **Display-only giving**: each church adds Paybill/Till number, account name, and bank details, shown with copy buttons
 - Giving categories: tithe, offering, building fund, welfare, Local Church Budget, and **admins can add custom categories**
 - PWA, English and Swahili
+
+## Platform admin panel (super admin)
+
+A staff-only console at `/platform` for SabbathLink's own team (the **Platform admin** role). It is part of Phase 1, because churches can't go live until staff verify them.
+
+**Access and safeguards**
+- Only accounts listed in `platform_admins` can open it. The first platform admin is added by hand in the Supabase dashboard; after that, platform admins can add or remove others.
+- It works through the same database rules as the rest of the app: RLS policies grant platform admins read access across the platform, and every change goes through a database function that checks `is_platform_admin()` and writes the audit log. No service-role or secret key in the app.
+- Every view of a person's details and every change is written to `audit_log` with the staff member, the subject and the time. Platform admins can read the audit log; nobody can edit or delete it.
+- Religious affiliation is sensitive personal data: show phone numbers and follows only on a person's detail page (which is logged), never in bulk exports.
+- Platform admins never see or handle church money, and they can't add or change a church's payment numbers. They can only hide a church's giving details while a fraud report is investigated.
+
+**Screens**
+1. **Overview:** counts of churches by status, accounts, church admins, applications waiting, payment-number changes waiting; a list of applications to review, oldest first.
+2. **Churches:** search and filter by status; church detail with profile, service times, admin team, recent programmes, posts, giving details, application and its history.
+   Actions: verify, reject (with a reason), suspend and reinstate (hidden from the directory and giving hidden, with a reason), edit profile fields, remove an announcement or event, hide giving details, remove an admin or pass ownership when a church loses access.
+3. **People:** search accounts by phone or name; person detail with profile, churches followed, admin roles and messages sent to them.
+   Actions: remove an admin role, grant or remove platform admin.
+4. **Messages:** contact people.
+   - Audiences: one person, all admins of one church, all church admins, everyone who follows a church, or all accounts.
+   - Messages land in the person's in-app inbox (Me → Messages) with an unread count.
+   - SMS is queued alongside when chosen, and sent once an SMS provider (Africa's Talking) is connected; until then the panel says SMS is not set up. One-to-one, staff can also call, SMS or WhatsApp from their own phone using links on the person's page.
+   - Only service messages (verification, safety, account and product notices). Marketing messages need the person's opt-in first, and every SMS must say how to stop them.
+5. **Audit log:** filterable by staff member, church and action.
+
+**Data model additions:** `platform_admins` (name, added by, added at); church `suspended` status plus status reason and `giving_hidden` flag; `messages` (sender, audience, title, body, channels, sent at) and `message_recipients` (message, person, read at, SMS status), filled in one step when a message is sent. Verification letters go to the private `church-letters` storage bucket (in a folder per applicant); only platform admins and the uploader can read them, and staff open them through short-lived links on the church page.
+
+**Build order:** schema and permissions with tests against the database → overview and church verification → churches and people screens → messages and the member inbox → audit log screen.
 
 ## Phase 1.5: Live song requests
 

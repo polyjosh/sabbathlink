@@ -6,11 +6,12 @@ import { BackButton } from "@/components/shell/BackButton";
 import { Screen, TopBar } from "@/components/shell/Screen";
 import { ButtonLink } from "@/components/ui/Button";
 import { Badge, Group } from "@/components/ui/primitives";
-import { getCurrentAdmin, listAdmins } from "@/lib/data";
+import { listAdmins } from "@/lib/data";
 import { can } from "@/lib/permissions";
 import { maskKenyanPhone } from "@/lib/phone";
 import { formatDate } from "@/lib/time";
 import type { Locale } from "@/lib/types";
+import { requireCurrentAdmin } from "@/lib/session";
 
 export async function generateMetadata() {
   return { title: (await getTranslations("team"))("title") };
@@ -18,14 +19,21 @@ export async function generateMetadata() {
 
 /** Roles are named after real church offices. Invite by phone number, right here. */
 export default async function TeamPage() {
-  const me = (await getCurrentAdmin())!;
+  const me = await requireCurrentAdmin();
   if (!can(me, "team.invite", me.churchId)) redirect("/admin");
   const t = await getTranslations("team");
   const tr = await getTranslations("adminRoles");
   const locale = (await getLocale()) as Locale;
   const admins = await listAdmins(me.churchId);
   const initials = (n: string | null) =>
-    n ? n.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase() : "+";
+    n
+      ? n
+          .split(/\s+/)
+          .map((w) => w[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase()
+      : "+";
 
   return (
     <Screen
@@ -41,7 +49,11 @@ export default async function TeamPage() {
       <Group>
         {admins.map((a) => {
           const role =
-            a.role === "communication" ? tr("communicationLeader") : a.role === "treasurer" ? t("treasurerNote") : tr(a.role);
+            a.role === "communication"
+              ? tr("communicationLeader")
+              : a.role === "treasurer"
+                ? t("treasurerNote")
+                : tr(a.role);
           return (
             <div key={a.id} className="flex min-h-16 items-center gap-3 py-2 pr-3.5 pl-3.5">
               <span
@@ -65,7 +77,9 @@ export default async function TeamPage() {
                   {a.status === "invited"
                     ? t("invited", {
                         role: tr(a.role),
-                        day: formatDate(a.invitedAt ?? new Date().toISOString(), locale, { weekday: "short" }),
+                        day: formatDate(a.invitedAt ?? new Date().toISOString(), locale, {
+                          weekday: "short",
+                        }),
                       })
                     : a.isOwner
                       ? t("ownerRole", { role: tr(a.role) })
@@ -82,7 +96,12 @@ export default async function TeamPage() {
       <InviteForm />
 
       {can(me, "ownership.handover", me.churchId) && (
-        <ButtonLink href="/admin/team/handover" variant="text" icon="swap" className="self-start !px-1">
+        <ButtonLink
+          href="/admin/team/handover"
+          variant="text"
+          icon="swap"
+          className="self-start !px-1"
+        >
           {t("handoverLink")}
         </ButtonLink>
       )}

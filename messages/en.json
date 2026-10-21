@@ -235,7 +235,10 @@
     "notifications": "Notifications",
     "membership": "Church membership",
     "manageChurch": "Manage a church",
-    "registerChurch": "Register a church"
+    "registerChurch": "Register a church",
+    "messages": "Messages",
+    "unread": "{count} new",
+    "platform": "Platform admin"
   },
   "notifications": {
     "title": "Notifications",
@@ -549,5 +552,251 @@
     "cta": "Hand over to {name}",
     "chooseFirst": "Choose the new owner",
     "confirmSms": "We'll send a code to your phone to confirm."
+  },
+  "platform": {
+    "title": "SabbathLink platform",
+    "nav": {
+      "label": "Platform",
+      "overview": "Overview",
+      "churches": "Churches",
+      "people": "People",
+      "messages": "Messages",
+      "audit": "Audit log",
+      "exit": "Exit"
+    },
+    "overviewHint": "Churches waiting for verification come first.",
+    "search": "Search",
+    "yes": "Yes",
+    "no": "No",
+    "save": "Save",
+    "reasonLabel": "Reason (kept in the audit log)",
+    "status": {
+      "pending": "Pending",
+      "verified": "Verified",
+      "rejected": "Rejected",
+      "suspended": "Suspended"
+    },
+    "stats": {
+      "waiting": "Waiting for verification",
+      "verified": "Verified churches",
+      "suspended": "Suspended or rejected",
+      "accounts": "Accounts",
+      "admins": "Church admins",
+      "paymentChanges": "Payment changes waiting"
+    },
+    "applications": {
+      "title": "Applications to review",
+      "none": "No applications waiting",
+      "by": "{name}, {role} · sent {ago}"
+    },
+    "churches": {
+      "count": "{count, plural, one {# church} other {# churches}}",
+      "search": "Church name, town, district or conference",
+      "all": "All",
+      "none": "No churches match"
+    },
+    "church": {
+      "publicPage": "Open public page",
+      "givingHiddenBadge": "Giving hidden",
+      "verifiedOn": "Verified {date}",
+      "reason": "Reason: {reason}",
+      "verify": "Verify church",
+      "verifyHint": "Verify only after checking the letter or confirming with the district pastor or conference. The church then appears in the directory and its giving details become visible.",
+      "reject": "Reject application",
+      "rejectReason": "Why is it rejected? The applicant can be told this.",
+      "suspend": "Suspend church",
+      "suspendReason": "Why is it suspended? It leaves the directory and its giving details are hidden.",
+      "reinstate": "Reinstate as verified",
+      "hideGiving": "Hide giving details",
+      "hideGivingReason": "Why? For example, a report that the numbers are not the church's.",
+      "showGiving": "Show giving details again",
+      "details": "Details",
+      "edit": "Edit details",
+      "fields": {
+        "name": "Name",
+        "shortName": "Short name",
+        "district": "District",
+        "conference": "Conference",
+        "town": "Town",
+        "county": "County",
+        "landmark": "Landmark",
+        "kiswahili": "Kiswahili service",
+        "created": "Registered",
+        "location": "Location",
+        "serviceTimes": "Service times"
+      },
+      "applications": "Application",
+      "noApplication": "No application on record (added by staff or sample data).",
+      "submitted": "Sent {date}",
+      "decided": "decided {date}",
+      "undecided": "not decided yet",
+      "openMap": "Open map",
+      "noTimes": "None given",
+      "openLetter": "Open letter",
+      "noLetter": "No letter was uploaded; ask the applicant to send it.",
+      "letterExpired": "Link expired; reload the page.",
+      "team": "Admin team",
+      "noTeam": "No admins.",
+      "invited": "Invited",
+      "makeOwner": "Make owner",
+      "removeAdmin": "Remove admin",
+      "teamHint": "Change the owner only when a church has lost access to the owner's phone, and after confirming with another officer.",
+      "giving": "Giving details",
+      "noGiving": "No payment details yet.",
+      "methods": {
+        "paybill": "Paybill",
+        "till": "Till",
+        "bank": "Bank"
+      },
+      "changes": "{waiting} of {total} payment changes waiting for a second admin",
+      "givingHint": "Staff can't add or change payment numbers; only the church's own admins can, with a second admin approving.",
+      "programmes": "Recent programmes",
+      "noProgrammes": "No programmes yet.",
+      "published": "Published",
+      "draft": "Draft",
+      "posts": "Announcements and events",
+      "noPosts": "Nothing posted.",
+      "kind": {
+        "announcement": "Announcement",
+        "event": "Event"
+      },
+      "removePost": "Remove",
+      "activity": "Activity"
+    },
+    "people": {
+      "hint": "Phone numbers are partly hidden here. Opening a person shows the full number and is recorded in the audit log.",
+      "search": "Name or phone number",
+      "none": "No one matches",
+      "noName": "No name yet",
+      "staff": "Platform admin",
+      "joined": "Joined {date}"
+    },
+    "person": {
+      "contact": "Contact",
+      "message": "Send message",
+      "call": "Call",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "contactHint": "Call, SMS and WhatsApp open on your own phone. Messages sent here appear in their SabbathLink inbox.",
+      "account": "Account",
+      "name": "Name",
+      "phone": "Phone",
+      "joined": "Joined",
+      "staff": "Platform admin",
+      "removeStaff": "Remove platform admin",
+      "makeStaff": "Make platform admin",
+      "makeStaffWarning": "Platform admins can see every church and every account, and verify churches. Only give this to SabbathLink staff.",
+      "makeStaffConfirm": "Yes, make platform admin",
+      "roles": "Church roles",
+      "noRoles": "Not an admin of any church.",
+      "follows": "Churches followed",
+      "noFollows": "Not following any church.",
+      "since": "since {date}",
+      "messages": "Messages from SabbathLink",
+      "noMessages": "No messages sent.",
+      "read": "read",
+      "unread": "unread"
+    },
+    "smsStatus": {
+      "none": "",
+      "queued": "waiting",
+      "sent": "sent",
+      "failed": "failed"
+    },
+    "messages": {
+      "hint": "Messages go to people's SabbathLink inbox (Me → Messages).",
+      "none": "No messages sent yet",
+      "smsQueued": "SMS waiting",
+      "recipients": "{count, plural, one {# person} other {# people}}"
+    },
+    "compose": {
+      "heading": "New message",
+      "audience": "Send to",
+      "audiences": {
+        "person": "One person",
+        "church_admins": "Admins of one church",
+        "church_followers": "Followers of one church",
+        "all_admins": "All church admins",
+        "everyone": "Everyone with an account"
+      },
+      "to": "To: {name}",
+      "church": "Church",
+      "chooseChurch": "Choose a church",
+      "everyoneWarning": "This goes to every account on SabbathLink.",
+      "confirmEveryone": "Type EVERYONE to confirm",
+      "title": "Title",
+      "body": "Message",
+      "counter": "{count}/600",
+      "alsoSms": "Also send by SMS",
+      "smsHint": "Sent to everyone in the audience with a phone number.",
+      "smsNotReady": "No SMS provider is connected yet: the SMS waits and is sent once one is set up.",
+      "serviceOnly": "Service messages only (verification, safety, account and product notices). Marketing needs people's consent first.",
+      "send": "Send message"
+    },
+    "audit": {
+      "hint": "Everything staff open or change, and church admins' main actions.",
+      "none": "Nothing recorded yet.",
+      "someone": "Someone",
+      "system": "System",
+      "filters": {
+        "all": "All",
+        "church": "Church status",
+        "viewed": "Views",
+        "message": "Messages",
+        "admin": "Admins",
+        "platform_admin": "Staff access",
+        "posted": "Posts",
+        "published": "Programmes"
+      },
+      "actions": {
+        "church_verified": "verified the church",
+        "church_rejected": "rejected the application",
+        "church_suspended": "suspended the church",
+        "church_pending": "set the church to pending",
+        "church_edited": "edited church details",
+        "giving_hidden": "hid giving details",
+        "giving_shown": "showed giving details again",
+        "announcement_removed": "removed an announcement",
+        "event_removed": "removed an event",
+        "admin_removed": "removed an admin",
+        "owner_changed": "changed the owner",
+        "platform_admin_added": "added a platform admin",
+        "platform_admin_removed": "removed a platform admin",
+        "message_sent": "sent a message",
+        "viewed_person": "opened a person's details",
+        "viewed_church": "opened the church's details",
+        "posted": "posted",
+        "published": "published the programme",
+        "updated_roles": "updated roles",
+        "changed_number": "changed a payment number",
+        "handed_over": "handed over ownership"
+      }
+    },
+    "done": {
+      "verified": "Church verified. It now shows in the directory.",
+      "rejected": "Application rejected.",
+      "suspended": "Church suspended.",
+      "pending": "Church set to pending.",
+      "givingHidden": "Giving details hidden.",
+      "givingShown": "Giving details shown again.",
+      "edited": "Details saved.",
+      "postRemoved": "Post removed.",
+      "adminRemoved": "Admin removed.",
+      "ownerChanged": "Owner changed.",
+      "staffAdded": "Platform admin added.",
+      "staffRemoved": "Platform admin removed.",
+      "sent": "Message sent."
+    },
+    "error": {
+      "generic": "That didn't work. Check the reason is filled in and try again.",
+      "confirm": "Type EVERYONE to send to every account."
+    }
+  },
+  "inbox": {
+    "title": "Messages",
+    "empty": "No messages",
+    "emptyBody": "Notices from the SabbathLink team about your account or church appear here.",
+    "new": "New",
+    "from": "SabbathLink team"
   }
 }

@@ -95,6 +95,8 @@ describe("church visibility", () => {
   it("shows giving only for verified churches", () => {
     expect(isGivingVisible({ status: "verified" })).toBe(true);
     expect(isGivingVisible({ status: "pending" })).toBe(false);
+    expect(isGivingVisible({ status: "suspended" })).toBe(false);
+    expect(isGivingVisible({ status: "verified", givingHidden: true })).toBe(false);
     expect(isGivingVisible({ status: "rejected" })).toBe(false);
   });
 

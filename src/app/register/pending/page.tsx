@@ -4,7 +4,7 @@ import { Screen, TopBar } from "@/components/shell/Screen";
 import { ButtonLink, IconLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Badge, Card } from "@/components/ui/primitives";
-import { db } from "@/lib/data/store";
+import { getLatestApplication } from "@/lib/data";
 import { formatKenyanPhone } from "@/lib/phone";
 import { getSignedInMember } from "@/lib/session";
 import { formatDate } from "@/lib/time";
@@ -14,9 +14,7 @@ import type { Locale } from "@/lib/types";
 export default async function PendingPage() {
   const member = await getSignedInMember();
   if (!member) redirect("/sign-in?next=/register");
-  const application = db()
-    .applications.filter((a) => a.applicantId === member.id)
-    .at(-1);
+  const application = await getLatestApplication(member.id);
   if (!application) redirect("/register");
   const t = await getTranslations("register");
   const tc = await getTranslations("common");
@@ -71,7 +69,7 @@ export default async function PendingPage() {
         <Badge tone="warn">{tc("verificationPending")}</Badge>
         <h1 className="t-title">{t("pendingTitle")}</h1>
         <p className="t-small">
-          {t("pendingSms", { phone: formatKenyanPhone(member.phone), church: application.church.name })}
+          {t("pendingSms", { phone: formatKenyanPhone(member.phone), church: application.churchName })}
         </p>
       </div>
       <Card className="gap-0">

@@ -235,7 +235,10 @@
     "notifications": "Arifa",
     "membership": "Ushiriki wa kanisa",
     "manageChurch": "Simamia kanisa",
-    "registerChurch": "Sajili kanisa"
+    "registerChurch": "Sajili kanisa",
+    "messages": "Ujumbe",
+    "unread": "{count} mpya",
+    "platform": "Msimamizi wa jukwaa"
   },
   "notifications": {
     "title": "Arifa",
@@ -549,5 +552,251 @@
     "cta": "Kabidhi kwa {name}",
     "chooseFirst": "Chagua mmiliki mpya",
     "confirmSms": "Tutatuma namba ya siri kwenye simu yako kuthibitisha."
+  },
+  "platform": {
+    "title": "Jukwaa la SabbathLink",
+    "nav": {
+      "label": "Jukwaa",
+      "overview": "Muhtasari",
+      "churches": "Makanisa",
+      "people": "Watu",
+      "messages": "Ujumbe",
+      "audit": "Kumbukumbu",
+      "exit": "Toka"
+    },
+    "overviewHint": "Makanisa yanayosubiri kuthibitishwa yanaanza.",
+    "search": "Tafuta",
+    "yes": "Ndiyo",
+    "no": "Hapana",
+    "save": "Hifadhi",
+    "reasonLabel": "Sababu (huhifadhiwa kwenye kumbukumbu)",
+    "status": {
+      "pending": "Yanasubiri",
+      "verified": "Limethibitishwa",
+      "rejected": "Limekataliwa",
+      "suspended": "Limesimamishwa"
+    },
+    "stats": {
+      "waiting": "Yanasubiri kuthibitishwa",
+      "verified": "Makanisa yaliyothibitishwa",
+      "suspended": "Yaliyosimamishwa au kukataliwa",
+      "accounts": "Akaunti",
+      "admins": "Wasimamizi wa makanisa",
+      "paymentChanges": "Mabadiliko ya malipo yanayosubiri"
+    },
+    "applications": {
+      "title": "Maombi ya kukagua",
+      "none": "Hakuna maombi yanayosubiri",
+      "by": "{name}, {role} · yametumwa {ago}"
+    },
+    "churches": {
+      "count": "{count, plural, one {Kanisa #} other {Makanisa #}}",
+      "search": "Jina la kanisa, mji, mtaa au konferensi",
+      "all": "Yote",
+      "none": "Hakuna kanisa linalolingana"
+    },
+    "church": {
+      "publicPage": "Fungua ukurasa wa umma",
+      "givingHiddenBadge": "Utoaji umefichwa",
+      "verifiedOn": "Limethibitishwa {date}",
+      "reason": "Sababu: {reason}",
+      "verify": "Thibitisha kanisa",
+      "verifyHint": "Thibitisha tu baada ya kukagua barua au kuthibitisha na mchungaji wa mtaa au konferensi. Kanisa litaonekana kwenye orodha na maelezo ya utoaji yataonekana.",
+      "reject": "Kataa ombi",
+      "rejectReason": "Kwa nini limekataliwa? Mwombaji anaweza kuambiwa hili.",
+      "suspend": "Simamisha kanisa",
+      "suspendReason": "Kwa nini limesimamishwa? Litaondolewa kwenye orodha na maelezo ya utoaji yatafichwa.",
+      "reinstate": "Rudisha kama limethibitishwa",
+      "hideGiving": "Ficha maelezo ya utoaji",
+      "hideGivingReason": "Kwa nini? Kwa mfano, ripoti kwamba namba si za kanisa.",
+      "showGiving": "Onyesha maelezo ya utoaji tena",
+      "details": "Maelezo",
+      "edit": "Hariri maelezo",
+      "fields": {
+        "name": "Jina",
+        "shortName": "Jina fupi",
+        "district": "Mtaa",
+        "conference": "Konferensi",
+        "town": "Mji",
+        "county": "Kaunti",
+        "landmark": "Alama",
+        "kiswahili": "Ibada ya Kiswahili",
+        "created": "Lilisajiliwa",
+        "location": "Mahali",
+        "serviceTimes": "Nyakati za ibada"
+      },
+      "applications": "Ombi",
+      "noApplication": "Hakuna ombi lililohifadhiwa (limeongezwa na wafanyakazi au data ya mfano).",
+      "submitted": "Limetumwa {date}",
+      "decided": "limeamuliwa {date}",
+      "undecided": "bado halijaamuliwa",
+      "openMap": "Fungua ramani",
+      "noTimes": "Hazijatolewa",
+      "openLetter": "Fungua barua",
+      "noLetter": "Hakuna barua iliyopakiwa; mwombe mwombaji aitume.",
+      "letterExpired": "Kiungo kimeisha muda; pakia ukurasa upya.",
+      "team": "Timu ya wasimamizi",
+      "noTeam": "Hakuna wasimamizi.",
+      "invited": "Amealikwa",
+      "makeOwner": "Mfanye mmiliki",
+      "removeAdmin": "Ondoa msimamizi",
+      "teamHint": "Badilisha mmiliki tu kanisa likipoteza simu ya mmiliki, na baada ya kuthibitisha na kiongozi mwingine.",
+      "giving": "Maelezo ya utoaji",
+      "noGiving": "Bado hakuna maelezo ya malipo.",
+      "methods": {
+        "paybill": "Paybill",
+        "till": "Till",
+        "bank": "Benki"
+      },
+      "changes": "Mabadiliko {waiting} kati ya {total} yanasubiri msimamizi wa pili",
+      "givingHint": "Wafanyakazi hawawezi kuongeza au kubadilisha namba za malipo; wasimamizi wa kanisa pekee wanaweza, msimamizi wa pili akikubali.",
+      "programmes": "Ratiba za hivi karibuni",
+      "noProgrammes": "Bado hakuna ratiba.",
+      "published": "Imechapishwa",
+      "draft": "Rasimu",
+      "posts": "Matangazo na matukio",
+      "noPosts": "Hakuna kilichochapishwa.",
+      "kind": {
+        "announcement": "Tangazo",
+        "event": "Tukio"
+      },
+      "removePost": "Ondoa",
+      "activity": "Shughuli"
+    },
+    "people": {
+      "hint": "Namba za simu zimefichwa kwa sehemu hapa. Kufungua mtu kunaonyesha namba kamili na kunarekodiwa kwenye kumbukumbu.",
+      "search": "Jina au namba ya simu",
+      "none": "Hakuna anayelingana",
+      "noName": "Bado hana jina",
+      "staff": "Msimamizi wa jukwaa",
+      "joined": "Alijiunga {date}"
+    },
+    "person": {
+      "contact": "Wasiliana",
+      "message": "Tuma ujumbe",
+      "call": "Piga simu",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "contactHint": "Simu, SMS na WhatsApp hufunguka kwenye simu yako. Ujumbe unaotumwa hapa unaonekana kwenye sanduku lao la SabbathLink.",
+      "account": "Akaunti",
+      "name": "Jina",
+      "phone": "Simu",
+      "joined": "Alijiunga",
+      "staff": "Msimamizi wa jukwaa",
+      "removeStaff": "Ondoa msimamizi wa jukwaa",
+      "makeStaff": "Mfanye msimamizi wa jukwaa",
+      "makeStaffWarning": "Wasimamizi wa jukwaa wanaona kila kanisa na kila akaunti, na wanathibitisha makanisa. Mpe hili mfanyakazi wa SabbathLink pekee.",
+      "makeStaffConfirm": "Ndiyo, mfanye msimamizi wa jukwaa",
+      "roles": "Nafasi kanisani",
+      "noRoles": "Si msimamizi wa kanisa lolote.",
+      "follows": "Makanisa anayofuata",
+      "noFollows": "Hafuati kanisa lolote.",
+      "since": "tangu {date}",
+      "messages": "Ujumbe kutoka SabbathLink",
+      "noMessages": "Hakuna ujumbe uliotumwa.",
+      "read": "umesomwa",
+      "unread": "haujasomwa"
+    },
+    "smsStatus": {
+      "none": "",
+      "queued": "inasubiri",
+      "sent": "imetumwa",
+      "failed": "imeshindwa"
+    },
+    "messages": {
+      "hint": "Ujumbe huenda kwenye sanduku la SabbathLink la mtu (Mimi → Ujumbe).",
+      "none": "Bado hakuna ujumbe uliotumwa",
+      "smsQueued": "SMS inasubiri",
+      "recipients": "{count, plural, one {mtu #} other {watu #}}"
+    },
+    "compose": {
+      "heading": "Ujumbe mpya",
+      "audience": "Tuma kwa",
+      "audiences": {
+        "person": "Mtu mmoja",
+        "church_admins": "Wasimamizi wa kanisa moja",
+        "church_followers": "Wafuasi wa kanisa moja",
+        "all_admins": "Wasimamizi wote wa makanisa",
+        "everyone": "Kila mwenye akaunti"
+      },
+      "to": "Kwa: {name}",
+      "church": "Kanisa",
+      "chooseChurch": "Chagua kanisa",
+      "everyoneWarning": "Ujumbe huu unaenda kwa kila akaunti ya SabbathLink.",
+      "confirmEveryone": "Andika EVERYONE kuthibitisha",
+      "title": "Kichwa",
+      "body": "Ujumbe",
+      "counter": "{count}/600",
+      "alsoSms": "Tuma pia kwa SMS",
+      "smsHint": "Inatumwa kwa kila mwenye namba ya simu katika kundi hili.",
+      "smsNotReady": "Bado hakuna mtoa huduma wa SMS: SMS itasubiri na kutumwa akiunganishwa.",
+      "serviceOnly": "Ujumbe wa huduma pekee (uthibitisho, usalama, akaunti na taarifa za huduma). Matangazo ya biashara yanahitaji idhini ya watu kwanza.",
+      "send": "Tuma ujumbe"
+    },
+    "audit": {
+      "hint": "Kila kitu wafanyakazi wanachofungua au kubadilisha, na hatua kuu za wasimamizi wa makanisa.",
+      "none": "Bado hakuna kilichorekodiwa.",
+      "someone": "Mtu",
+      "system": "Mfumo",
+      "filters": {
+        "all": "Yote",
+        "church": "Hali ya kanisa",
+        "viewed": "Yaliyofunguliwa",
+        "message": "Ujumbe",
+        "admin": "Wasimamizi",
+        "platform_admin": "Ruhusa za wafanyakazi",
+        "posted": "Machapisho",
+        "published": "Ratiba"
+      },
+      "actions": {
+        "church_verified": "alithibitisha kanisa",
+        "church_rejected": "alikataa ombi",
+        "church_suspended": "alisimamisha kanisa",
+        "church_pending": "aliweka kanisa kusubiri",
+        "church_edited": "alihariri maelezo ya kanisa",
+        "giving_hidden": "alificha maelezo ya utoaji",
+        "giving_shown": "alionyesha tena maelezo ya utoaji",
+        "announcement_removed": "aliondoa tangazo",
+        "event_removed": "aliondoa tukio",
+        "admin_removed": "aliondoa msimamizi",
+        "owner_changed": "alibadilisha mmiliki",
+        "platform_admin_added": "aliongeza msimamizi wa jukwaa",
+        "platform_admin_removed": "aliondoa msimamizi wa jukwaa",
+        "message_sent": "alituma ujumbe",
+        "viewed_person": "alifungua maelezo ya mtu",
+        "viewed_church": "alifungua maelezo ya kanisa",
+        "posted": "alichapisha",
+        "published": "alichapisha ratiba",
+        "updated_roles": "alisasisha nafasi",
+        "changed_number": "alibadilisha namba ya malipo",
+        "handed_over": "alikabidhi umiliki"
+      }
+    },
+    "done": {
+      "verified": "Kanisa limethibitishwa. Sasa linaonekana kwenye orodha.",
+      "rejected": "Ombi limekataliwa.",
+      "suspended": "Kanisa limesimamishwa.",
+      "pending": "Kanisa limewekwa kusubiri.",
+      "givingHidden": "Maelezo ya utoaji yamefichwa.",
+      "givingShown": "Maelezo ya utoaji yanaonekana tena.",
+      "edited": "Maelezo yamehifadhiwa.",
+      "postRemoved": "Chapisho limeondolewa.",
+      "adminRemoved": "Msimamizi ameondolewa.",
+      "ownerChanged": "Mmiliki amebadilishwa.",
+      "staffAdded": "Msimamizi wa jukwaa ameongezwa.",
+      "staffRemoved": "Msimamizi wa jukwaa ameondolewa.",
+      "sent": "Ujumbe umetumwa."
+    },
+    "error": {
+      "generic": "Haikufanikiwa. Hakikisha sababu imejazwa kisha ujaribu tena.",
+      "confirm": "Andika EVERYONE kutuma kwa kila akaunti."
+    }
+  },
+  "inbox": {
+    "title": "Ujumbe",
+    "empty": "Hakuna ujumbe",
+    "emptyBody": "Taarifa kutoka timu ya SabbathLink kuhusu akaunti yako au kanisa lako zinaonekana hapa.",
+    "new": "Mpya",
+    "from": "Timu ya SabbathLink"
   }
 }
