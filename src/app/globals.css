@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+/*
+ * SabbathLink design tokens (design system v0.1).
+ * Semantic colours are CSS variables so dark mode is a variable swap, not a
+ * second set of classes. Dark follows the system unless the member picks
+ * Light or Dark in Profile > Appearance (sets data-theme on <html>).
+ */
+:root {
+  --canvas: #f7f6f2;
+  --surface: #ffffff;
+  --surface-2: #f1f3f1;
+  --ink: #16252a;
+  --ink-2: #4a5a5f;
+  --ink-3: #4f5f63;
+  --ink-label: #2c3b3f;
+  --ink-muted: #6b7a7e;
+  --line: #e3e6e4;
+  --line-soft: #eef0ee;
+  --line-strong: #d5d9d6;
+  --field: #c9d0ce;
+  --primary: #0f4c5c;
+  --on-primary: #ffffff;
+  --primary-soft: #dcebec;
+  --primary-soft-ink: #0b3a47;
+  --primary-tint: #f1f7f7;
+  --header: #0f4c5c;
+  --accent: #e3a93b;
+  --on-accent: #2a1c02;
+  --accent-ink: #7a4f08;
+  --warn-soft: #fbefd6;
+  --warn-ink: #6e4606;
+  --warn-ink-strong: #5c3a04;
+  --warn-tint: #fffaf0;
+  --warn-line: #e9c98a;
+  --success: #1f7a4d;
+  --success-soft: #e3f1e8;
+  --success-ink: #17603b;
+  --danger: #b3261e;
+  --danger-soft: #fbe7e5;
+  --danger-ink: #9a2019;
+  --neutral-soft: #edeeec;
+  --neutral-ink: #3d4c50;
+  --seg: #e9eae6;
+  --share: #1b6e43;
+  --share-soft: #eaf3ec;
+  --skeleton: #e8eae7;
+  --map: #e4e9e2;
+  --map-green: #d3e2cf;
+  --map-road: #ffffff;
+  --toast: #16252a;
+  --on-toast: #ffffff;
+  --offline: #2c3b3f;
+  --scrim: rgb(14 23 25 / 0.55);
+  color-scheme: light;
+}
+
+/* Dark tokens appear twice: once for an explicit choice, once for the system setting. */
+:root[data-theme="dark"] {
+  --canvas: #0e1719;
+  --surface: #172427;
+  --surface-2: #1f3033;
+  --ink: #ecf1f0;
+  --ink-2: #a8b7b9;
+  --ink-3: #a8b7b9;
+  --ink-label: #d5dedf;
+  --ink-muted: #8fa0a3;
+  --line: #2b3b3e;
+  --line-soft: #223235;
+  --line-strong: #2b3b3e;
+  --field: #3a4b4e;
+  --primary: #7cc6d2;
+  --on-primary: #0e1719;
+  --primary-soft: #1d3a40;
+  --primary-soft-ink: #bfe3e9;
+  --primary-tint: #1a3034;
+  --header: #1f5e6e;
+  --accent: #f0c063;
+  --on-accent: #2a1c02;
+  --accent-ink: #f0c063;
+  --warn-soft: #3a2e14;
+  --warn-ink: #f0c063;
+  --warn-ink-strong: #f6d48f;
+  --warn-tint: #2a2516;
+  --warn-line: #6e5520;
+  --success: #6cc892;
+  --success-soft: #173326;
+  --success-ink: #6cc892;
+  --danger: #f2b8b5;
+  --danger-soft: #3b1e1c;
+  --danger-ink: #f2b8b5;
+  --neutral-soft: #223235;
+  --neutral-ink: #c5d0d1;
+  --seg: #1f3033;
+  --share: #1b6e43;
+  --share-soft: #1a3326;
+  --skeleton: #223235;
+  --map: #1b2a2d;
+  --map-green: #20372c;
+  --map-road: #2b3b3e;
+  --toast: #ecf1f0;
+  --on-toast: #0e1719;
+  --offline: #2c3b3f;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas: #0e1719;
+    --surface: #172427;
+    --surface-2: #1f3033;
+    --ink: #ecf1f0;
+    --ink-2: #a8b7b9;
+    --ink-3: #a8b7b9;
+    --ink-label: #d5dedf;
+    --ink-muted: #8fa0a3;
+    --line: #2b3b3e;
+    --line-soft: #223235;
+    --line-strong: #2b3b3e;
+    --field: #3a4b4e;
+    --primary: #7cc6d2;
+    --on-primary: #0e1719;
+    --primary-soft: #1d3a40;
+    --primary-soft-ink: #bfe3e9;
+    --primary-tint: #1a3034;
+    --header: #1f5e6e;
+    --accent: #f0c063;
+    --on-accent: #2a1c02;
+    --accent-ink: #f0c063;
+    --warn-soft: #3a2e14;
+    --warn-ink: #f0c063;
+    --warn-ink-strong: #f6d48f;
+    --warn-tint: #2a2516;
+    --warn-line: #6e5520;
+    --success: #6cc892;
+    --success-soft: #173326;
+    --success-ink: #6cc892;
+    --danger: #f2b8b5;
+    --danger-soft: #3b1e1c;
+    --danger-ink: #f2b8b5;
+    --neutral-soft: #223235;
+    --neutral-ink: #c5d0d1;
+    --seg: #1f3033;
+    --share-soft: #1a3326;
+    --skeleton: #223235;
+    --map: #1b2a2d;
+    --map-green: #20372c;
+    --map-road: #2b3b3e;
+    --toast: #ecf1f0;
+    --on-toast: #0e1719;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-figtree), "Segoe UI", Roboto, system-ui, sans-serif;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-label: var(--ink-label);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-line-strong: var(--line-strong);
+  --color-field: var(--field);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-ink: var(--primary-soft-ink);
+  --color-primary-tint: var(--primary-tint);
+  --color-header: var(--header);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --color-warn-ink-strong: var(--warn-ink-strong);
+  --color-warn-tint: var(--warn-tint);
+  --color-warn-line: var(--warn-line);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-ink: var(--success-ink);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-ink: var(--danger-ink);
+  --color-neutral-soft: var(--neutral-soft);
+  --color-neutral-ink: var(--neutral-ink);
+  --color-seg: var(--seg);
+  --color-share: var(--share);
+  --color-share-soft: var(--share-soft);
+  --color-skeleton: var(--skeleton);
+  --color-map: var(--map);
+  --color-map-green: var(--map-green);
+  --color-map-road: var(--map-road);
+  --color-toast: var(--toast);
+  --color-on-toast: var(--on-toast);
+  --color-offline: var(--offline);
+  --color-scrim: var(--scrim);
+  --color-sun: #e3a93b;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+  }
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  a {
+    color: var(--primary);
+  }
+}
+
+/* Type scale from the design system. */
+@utility t-display {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+@utility t-title {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+@utility t-heading {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+@utility t-subhead {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+}
+@utility t-body {
+  font-size: 16px;
+  line-height: 24px;
+}
+@utility t-small {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink-2);
+}
+@utility t-caption {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-3);
+}
+@utility t-overline {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+@utility t-label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--ink-label);
+}
+@utility num {
+  font-variant-numeric: tabular-nums;
+}
