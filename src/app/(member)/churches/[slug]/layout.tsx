@@ -29,7 +29,7 @@ export default async function ChurchLayout({
 }) {
   const { slug } = await params;
   const church = await getChurch(slug);
-  if (!church || church.status === "rejected") notFound();
+  if (!church || church.status === "rejected" || church.status === "suspended") notFound();
   const t = await getTranslations("church");
   const tc = await getTranslations("common");
   const following = (await getFollowing()).includes(church.id);

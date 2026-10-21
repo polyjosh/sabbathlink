@@ -7,21 +7,34 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { Badge, Card } from "@/components/ui/primitives";
 import {
   getChurchById,
-  getCurrentAdmin,
   getProgramme,
   listActivity,
   listAnnouncements,
   listEvents,
 } from "@/lib/data";
 import { can } from "@/lib/permissions";
-import { emptyRoles, itemTitle, programmeCounts, roleCounts, roleLabel, type ProgrammeT } from "@/lib/programme";
-import { formatDate, greetingKey, nairobiDate, nextSabbath, serviceTimeText, timeAgo } from "@/lib/time";
-import { getSignedInMember } from "@/lib/session";
+import {
+  emptyRoles,
+  itemTitle,
+  programmeCounts,
+  roleCounts,
+  roleLabel,
+  type ProgrammeT,
+} from "@/lib/programme";
+import {
+  formatDate,
+  greetingKey,
+  nairobiDate,
+  nextSabbath,
+  serviceTimeText,
+  timeAgo,
+} from "@/lib/time";
+import { getSignedInMember, requireCurrentAdmin } from "@/lib/session";
 import type { Locale } from "@/lib/types";
 
 /** Answers one question first: is this Sabbath's programme ready? */
 export default async function AdminDashboard() {
-  const admin = (await getCurrentAdmin())!;
+  const admin = await requireCurrentAdmin();
   const church = (await getChurchById(admin.churchId))!;
   const member = await getSignedInMember();
   const t = await getTranslations("dashboard");
@@ -37,7 +50,11 @@ export default async function AdminDashboard() {
   const percent = counts.total ? Math.round((counts.filled / counts.total) * 100) : 0;
   const empty = programme ? emptyRoles(programme) : [];
   const ready = programme?.status === "published" && empty.length === 0;
-  const dateLabel = formatDate(nairobiDate(date), locale, { weekday: "short", day: "numeric", month: "short" });
+  const dateLabel = formatDate(nairobiDate(date), locale, {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
   const ago = programme ? timeAgo(programme.updatedAt, locale) : "";
 
   const [activity, announcements, events] = await Promise.all([
@@ -46,16 +63,27 @@ export default async function AdminDashboard() {
     listEvents(church.id),
   ]);
 
-  const status = !programme
-    ? t("notStarted")
-    : ready
-      ? t("readyTitle")
-      : t("incomplete");
+  const status = !programme ? t("notStarted") : ready ? t("readyTitle") : t("incomplete");
 
   const quick: { href: string; icon: IconName; label: string; show: boolean }[] = [
-    { href: "/admin/programme", icon: "cal", label: t("updateProgramme"), show: can(admin, "programme.edit", church.id) },
-    { href: "/admin/posts/announcement", icon: "mega", label: t("postAnnouncement"), show: can(admin, "posts.edit", church.id) },
-    { href: "/admin/posts/event", icon: "plus", label: t("addEvent"), show: can(admin, "posts.edit", church.id) },
+    {
+      href: "/admin/programme",
+      icon: "cal",
+      label: t("updateProgramme"),
+      show: can(admin, "programme.edit", church.id),
+    },
+    {
+      href: "/admin/posts/announcement",
+      icon: "mega",
+      label: t("postAnnouncement"),
+      show: can(admin, "posts.edit", church.id),
+    },
+    {
+      href: "/admin/posts/event",
+      icon: "plus",
+      label: t("addEvent"),
+      show: can(admin, "posts.edit", church.id),
+    },
   ];
 
   const ring = (size: "sm" | "lg") => (
@@ -63,7 +91,9 @@ export default async function AdminDashboard() {
       role="img"
       aria-label={t("percent", { percent })}
       className={`flex shrink-0 items-center justify-center rounded-full ${size === "lg" ? "size-[88px]" : "size-16"}`}
-      style={{ background: `conic-gradient(${ready ? "var(--success)" : "var(--accent)"} 0 ${percent}%, var(--line) 0)` }}
+      style={{
+        background: `conic-gradient(${ready ? "var(--success)" : "var(--accent)"} 0 ${percent}%, var(--line) 0)`,
+      }}
     >
       <span
         className={`flex items-center justify-center rounded-full bg-surface font-extrabold ${
@@ -81,7 +111,9 @@ export default async function AdminDashboard() {
       top={
         <header className="flex min-h-14 items-center gap-1 py-2 pr-2 pl-4 lg:hidden">
           <div className="min-w-0 flex-1">
-            <p className="flex min-h-11 items-center gap-1.5 text-[17px] font-extrabold">{church.shortName}</p>
+            <p className="flex min-h-11 items-center gap-1.5 text-[17px] font-extrabold">
+              {church.shortName}
+            </p>
             <p className="t-caption -mt-1.5">{t("signedInAs", { role: tr(admin.role) })}</p>
           </div>
           <Link
@@ -99,8 +131,12 @@ export default async function AdminDashboard() {
       {/* Desktop header (D1). */}
       <header className="hidden flex-wrap items-center justify-between gap-4 lg:flex">
         <div>
-          <p className="t-small">{formatDate(new Date(), locale, { weekday: "long", day: "numeric", month: "long" })}</p>
-          <h1 className="t-display">{th(`greeting.${greetingKey()}`, { name: member?.name.split(" ")[0] ?? "" })}</h1>
+          <p className="t-small">
+            {formatDate(new Date(), locale, { weekday: "long", day: "numeric", month: "long" })}
+          </p>
+          <h1 className="t-display">
+            {th(`greeting.${greetingKey()}`, { name: member?.name.split(" ")[0] ?? "" })}
+          </h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {church.status === "verified" && (
@@ -130,7 +166,9 @@ export default async function AdminDashboard() {
             )}
             {programme && (
               <p className="t-caption lg:hidden">
-                {programme.status === "published" ? `${t("published")} · ${ago}` : t("draftSaved", { ago })}
+                {programme.status === "published"
+                  ? `${t("published")} · ${ago}`
+                  : t("draftSaved", { ago })}
               </p>
             )}
             {programme && empty.length > 0 && (
@@ -161,7 +199,10 @@ export default async function AdminDashboard() {
               .map((it) => {
                 const c = roleCounts(it);
                 return (
-                  <div key={it.id} className="flex flex-col gap-1 rounded-xl border border-line px-3.5 py-3">
+                  <div
+                    key={it.id}
+                    className="flex flex-col gap-1 rounded-xl border border-line px-3.5 py-3"
+                  >
                     <p className="t-caption">{serviceTimeText(it.startTime, locale)}</p>
                     <p className="t-subhead">{itemTitle(it, pt)}</p>
                     <Badge tone={c.filled === c.total ? "success" : "warn"} className="self-start">
@@ -206,8 +247,12 @@ export default async function AdminDashboard() {
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr>
-                  <th className="border-b border-line px-2.5 py-2 text-left text-xs font-bold text-ink-3">{t("item")}</th>
-                  <th className="border-b border-line px-2.5 py-2 text-left text-xs font-bold text-ink-3">{t("hides")}</th>
+                  <th className="border-b border-line px-2.5 py-2 text-left text-xs font-bold text-ink-3">
+                    {t("item")}
+                  </th>
+                  <th className="border-b border-line px-2.5 py-2 text-left text-xs font-bold text-ink-3">
+                    {t("hides")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -219,7 +264,9 @@ export default async function AdminDashboard() {
                       <span className="t-caption">{t("announcement")}</span>
                     </td>
                     <td className="px-2.5 py-2">
-                      {a.hideAfter ? formatDate(a.hideAfter, locale, { day: "numeric", month: "short" }) : t("never")}
+                      {a.hideAfter
+                        ? formatDate(a.hideAfter, locale, { day: "numeric", month: "short" })
+                        : t("never")}
                     </td>
                   </tr>
                 ))}
@@ -229,11 +276,19 @@ export default async function AdminDashboard() {
                       <strong>{e.title}</strong>
                       <br />
                       <span className="t-caption">
-                        {t("event", { date: formatDate(e.startsAt, locale, { weekday: "short", day: "numeric", month: "short" }) })}
+                        {t("event", {
+                          date: formatDate(e.startsAt, locale, {
+                            weekday: "short",
+                            day: "numeric",
+                            month: "short",
+                          }),
+                        })}
                       </span>
                     </td>
                     <td className="px-2.5 py-2">
-                      {e.hideAfter ? formatDate(e.hideAfter, locale, { day: "numeric", month: "short" }) : t("never")}
+                      {e.hideAfter
+                        ? formatDate(e.hideAfter, locale, { day: "numeric", month: "short" })
+                        : t("never")}
                     </td>
                   </tr>
                 ))}
@@ -255,7 +310,10 @@ export default async function AdminDashboard() {
                     actor: a.actor === "you" ? t("you") : a.actor,
                     subject:
                       a.action === "published"
-                        ? formatDate(nairobiDate(a.subject), locale, { day: "numeric", month: "short" })
+                        ? formatDate(nairobiDate(a.subject), locale, {
+                            day: "numeric",
+                            month: "short",
+                          })
                         : a.subject,
                     b: (c) => <strong>{c}</strong>,
                   })}

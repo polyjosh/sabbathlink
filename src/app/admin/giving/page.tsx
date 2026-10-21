@@ -8,15 +8,20 @@ import { Screen, TopBar } from "@/components/shell/Screen";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Banner, EmptyState, Group, GroupHeading, IconTile } from "@/components/ui/primitives";
-import { getCurrentAdmin, getGivingSettings } from "@/lib/data";
+import { getGivingSettings } from "@/lib/data";
 import { can } from "@/lib/permissions";
+import { requireCurrentAdmin } from "@/lib/session";
 
 export async function generateMetadata() {
   return { title: (await getTranslations("givingAdmin"))("title") };
 }
 
-export default async function GivingSettingsPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) {
-  const admin = (await getCurrentAdmin())!;
+export default async function GivingSettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sent?: string }>;
+}) {
+  const admin = await requireCurrentAdmin();
   const t = await getTranslations("givingAdmin");
   const top = (
     <TopBar>
@@ -47,13 +52,23 @@ export default async function GivingSettingsPage({ searchParams }: { searchParam
         ? t("tillSummary", { number: m.number ?? "" })
         : t("bankSummary", { last4: (m.bankAccountNumber ?? "").replace(/\s/g, "").slice(-4) });
   const name = (m: (typeof methods)[number]) =>
-    m.type === "bank" ? (m.bankName ?? t("bank")) : m.type === "till" ? "M-Pesa Till" : "M-Pesa Paybill";
+    m.type === "bank"
+      ? (m.bankName ?? t("bank"))
+      : m.type === "till"
+        ? "M-Pesa Till"
+        : "M-Pesa Paybill";
 
   return (
     <Screen
       className="lg:max-w-[720px]"
       top={top}
-      banner={sent ? <Banner tone="success" icon="check">{t("sentForApproval")}</Banner> : null}
+      banner={
+        sent ? (
+          <Banner tone="success" icon="check">
+            {t("sentForApproval")}
+          </Banner>
+        ) : null
+      }
       nav={<AdminNav />}
     >
       <GroupHeading>{t("methodsOrder")}</GroupHeading>
@@ -61,9 +76,17 @@ export default async function GivingSettingsPage({ searchParams }: { searchParam
         {methods.map((m, i) => (
           <div key={m.id} className="flex min-h-16 items-center gap-2 py-1.5 pr-1 pl-1">
             {editable && (
-              <MoveButtons id={m.id} name={name(m)} first={i === 0} last={i === methods.length - 1} />
+              <MoveButtons
+                id={m.id}
+                name={name(m)}
+                first={i === 0}
+                last={i === methods.length - 1}
+              />
             )}
-            <IconTile icon={m.type === "bank" ? "bank" : "mobile"} tone={m.type === "bank" ? "teal" : "green"} />
+            <IconTile
+              icon={m.type === "bank" ? "bank" : "mobile"}
+              tone={m.type === "bank" ? "teal" : "green"}
+            />
             <div className="min-w-0 flex-1">
               <p className="text-[15px] leading-[22px] font-bold">{name(m)}</p>
               <p className="t-caption">{summary(m)}</p>

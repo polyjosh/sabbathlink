@@ -3,9 +3,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getMember } from "@/lib/data";
+import { adoptVisitorState } from "@/lib/data/supabase";
 import { normalizeKenyanPhone } from "@/lib/phone";
-import { FOLLOW_COOKIE, SESSION_COOKIE, WELCOMED_COOKIE } from "@/lib/session";
-import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { FOLLOW_COOKIE, SESSION_COOKIE, WELCOMED_COOKIE, getVisitorFollowing } from "@/lib/session";
+import { getSupabase, isDemoSignInAllowed, isSupabaseConfigured } from "@/lib/supabase/server";
 
 const YEAR = 60 * 60 * 24 * 365;
 
@@ -17,9 +18,6 @@ function safeNext(value: FormDataEntryValue | null) {
 
 export type AuthState = { error?: "phone" | "code" | "send" | "notConfigured" } | null;
 
-/** Development without Supabase: a demo session so the screens can be used. Never in production. */
-const demoAllowed = () => !isSupabaseConfigured() && process.env.NODE_ENV !== "production";
-
 export async function markWelcomed() {
   (await cookies()).set(WELCOMED_COOKIE, "1", { path: "/", maxAge: YEAR, sameSite: "lax" });
   redirect("/");
@@ -30,10 +28,14 @@ export async function sendCode(_prev: AuthState, form: FormData): Promise<AuthSt
   if (!phone) return { error: "phone" };
 
   if (isSupabaseConfigured()) {
-    const supabase = await createSupabaseServerClient();
+    const supabase = await getSupabase();
     const { error } = await supabase.auth.signInWithOtp({ phone });
-    if (error) return { error: "send" };
-  } else if (!demoAllowed()) {
+    if (error) {
+      // The reason is in the server log only (never the phone number).
+      console.error("sendCode failed:", error.status, error.code, error.message);
+      return { error: "send" };
+    }
+  } else if (!isDemoSignInAllowed()) {
     return { error: "notConfigured" };
   }
   const next = safeNext(form.get("next"));
@@ -48,10 +50,12 @@ export async function verifyCode(_prev: AuthState, form: FormData): Promise<Auth
 
   const store = await cookies();
   if (isSupabaseConfigured()) {
-    const supabase = await createSupabaseServerClient();
+    const supabase = await getSupabase();
     const { error } = await supabase.auth.verifyOtp({ phone, token, type: "sms" });
     if (error) return { error: "code" };
-  } else if (demoAllowed()) {
+    await adoptVisitorState(await getVisitorFollowing());
+    store.delete(FOLLOW_COOKIE);
+  } else if (isDemoSignInAllowed()) {
     store.set(SESSION_COOKIE, "demo", { path: "/", maxAge: YEAR, sameSite: "lax", httpOnly: true });
     // The demo member already follows two churches; keep any the visitor chose.
     if (!store.get(FOLLOW_COOKIE)?.value) {
@@ -69,7 +73,7 @@ export async function verifyCode(_prev: AuthState, form: FormData): Promise<Auth
 
 export async function signOut() {
   if (isSupabaseConfigured()) {
-    const supabase = await createSupabaseServerClient();
+    const supabase = await getSupabase();
     await supabase.auth.signOut();
   }
   (await cookies()).delete(SESSION_COOKIE);

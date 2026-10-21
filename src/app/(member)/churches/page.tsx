@@ -5,6 +5,7 @@ import { FollowButton } from "@/components/church/FollowButton";
 import { NearMeChip } from "@/components/church/NearMeChip";
 import { MemberNav } from "@/components/shell/BottomNav";
 import { OfflineBanner } from "@/components/shell/OfflineBanner";
+import { RefreshOnReturn } from "@/components/shell/RefreshOnReturn";
 import { PageTitle, Screen, TopBar } from "@/components/shell/Screen";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
@@ -61,6 +62,7 @@ export default async function DirectoryPage({ searchParams }: { searchParams: Pa
 
   const top = (
     <>
+      <RefreshOnReturn />
       <TopBar className="pr-4">
         <PageTitle>{t("title")}</PageTitle>
         <nav aria-label={t("view")} className="flex gap-0.5 rounded-full bg-seg p-[3px]">

@@ -2,16 +2,12 @@
 
 export type Locale = "en" | "sw";
 
-export type ChurchStatus = "pending" | "verified" | "rejected";
+/** "suspended" is set by platform staff, e.g. while a fraud report is checked. */
+export type ChurchStatus = "pending" | "verified" | "rejected" | "suspended";
 
 /** Known programme items are translated; "custom" items show their own title. */
 export type ItemKind =
-  | "sabbath_school"
-  | "divine_service"
-  | "ay"
-  | "vespers"
-  | "prayer_meeting"
-  | "custom";
+  "sabbath_school" | "divine_service" | "ay" | "vespers" | "prayer_meeting" | "custom";
 
 /** Known roles are translated; "custom" roles show their own label. */
 export type RoleKey =
@@ -52,6 +48,8 @@ export interface Church {
   lat: number;
   lng: number;
   status: ChurchStatus;
+  /** Platform staff hid the giving details (fraud report under review). */
+  givingHidden?: boolean;
   /** Reserved for the district/conference hierarchy (Phase 4). */
   parentOrgId: string | null;
   kiswahiliService: boolean;
@@ -130,11 +128,7 @@ export interface PaymentMethod {
 }
 
 export type GivingCategoryKey =
-  | "tithe"
-  | "offering"
-  | "building_fund"
-  | "welfare"
-  | "local_church_budget";
+  "tithe" | "offering" | "building_fund" | "welfare" | "local_church_budget";
 
 export interface GivingCategory {
   id: string;

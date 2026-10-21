@@ -5,17 +5,22 @@ import { BackButton } from "@/components/shell/BackButton";
 import { Screen, TopBar } from "@/components/shell/Screen";
 import { ButtonLink } from "@/components/ui/Button";
 import { Banner, Card, DateTile, IconTile } from "@/components/ui/primitives";
-import { getCurrentAdmin, listAnnouncements, listEvents } from "@/lib/data";
+import { listAnnouncements, listEvents } from "@/lib/data";
 import { can } from "@/lib/permissions";
 import { formatDate } from "@/lib/time";
 import type { Locale } from "@/lib/types";
+import { requireCurrentAdmin } from "@/lib/session";
 
 export async function generateMetadata() {
   return { title: (await getTranslations("posts"))("title") };
 }
 
-export default async function PostsPage({ searchParams }: { searchParams: Promise<{ posted?: string }> }) {
-  const admin = (await getCurrentAdmin())!;
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ posted?: string }>;
+}) {
+  const admin = await requireCurrentAdmin();
   if (!can(admin, "posts.edit", admin.churchId)) redirect("/admin");
   const t = await getTranslations("posts");
   const td = await getTranslations("dashboard");

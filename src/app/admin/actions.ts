@@ -2,8 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getCurrentAdmin } from "@/lib/data";
-import { db, newId } from "@/lib/data/store";
+import * as data from "@/lib/data";
 import { can, type Capability } from "@/lib/permissions";
 import { normalizeKenyanPhone } from "@/lib/phone";
 import type { AdminRole, ItemKind, ProgrammeItem, RoleKey } from "@/lib/types";
@@ -14,7 +13,7 @@ import type { AdminRole, ItemKind, ProgrammeItem, RoleKey } from "@/lib/types";
  * write either.
  */
 async function requireAdmin(capability: Capability) {
-  const admin = await getCurrentAdmin();
+  const admin = await data.getCurrentAdmin();
   if (!admin || !can(admin, capability, admin.churchId)) {
     throw new Error(`Not allowed: ${capability}`);
   }
@@ -25,10 +24,27 @@ function done() {
   revalidatePath("/", "layout");
 }
 
-const ITEM_KINDS: ItemKind[] = ["sabbath_school", "divine_service", "ay", "vespers", "prayer_meeting", "custom"];
+const ITEM_KINDS: ItemKind[] = [
+  "sabbath_school",
+  "divine_service",
+  "ay",
+  "vespers",
+  "prayer_meeting",
+  "custom",
+];
 const ROLE_KEYS: RoleKey[] = [
-  "superintendent", "mission_story", "lesson", "preacher", "sermon_title", "platform_elder",
-  "song_leader", "deacons", "special_music", "leader", "theme", "custom",
+  "superintendent",
+  "mission_story",
+  "lesson",
+  "preacher",
+  "sermon_title",
+  "platform_elder",
+  "song_leader",
+  "deacons",
+  "special_music",
+  "leader",
+  "theme",
+  "custom",
 ];
 const HM = /^([01]\d|2[0-3]):[0-5]\d$/;
 const YMD = /^\d{4}-\d{2}-\d{2}$/;
@@ -40,20 +56,22 @@ function cleanItems(raw: unknown): ProgrammeItem[] {
   return raw.slice(0, 20).map((it) => {
     if (!ITEM_KINDS.includes(it?.kind) || !HM.test(it?.startTime)) throw new Error("Invalid item");
     return {
-      id: text(it.id, 40) || newId("it"),
+      id: text(it.id, 40),
       kind: it.kind,
       title: it.kind === "custom" ? text(it.title) : undefined,
       startTime: it.startTime,
-      roles: (Array.isArray(it.roles) ? it.roles : []).slice(0, 20).map((r: Record<string, unknown>) => {
-        if (!ROLE_KEYS.includes(r?.roleKey as RoleKey)) throw new Error("Invalid role");
-        return {
-          id: text(r.id, 40) || newId("r"),
-          roleKey: r.roleKey as RoleKey,
-          label: r.roleKey === "custom" ? text(r.label) : undefined,
-          value: text(r.value) || null,
-          optional: Boolean(r.optional),
-        };
-      }),
+      roles: (Array.isArray(it.roles) ? it.roles : [])
+        .slice(0, 20)
+        .map((r: Record<string, unknown>) => {
+          if (!ROLE_KEYS.includes(r?.roleKey as RoleKey)) throw new Error("Invalid role");
+          return {
+            id: text(r.id, 40),
+            roleKey: r.roleKey as RoleKey,
+            label: r.roleKey === "custom" ? text(r.label) : undefined,
+            value: text(r.value) || null,
+            optional: Boolean(r.optional),
+          };
+        }),
     };
   });
 }
@@ -61,56 +79,27 @@ function cleanItems(raw: unknown): ProgrammeItem[] {
 export async function saveProgramme(input: { date: string; items: unknown; publish: boolean }) {
   const admin = await requireAdmin("programme.edit");
   if (!YMD.test(input.date)) throw new Error("Invalid date");
-  const items = cleanItems(input.items);
-  const store = db();
-  const now = new Date().toISOString();
-  let p = store.programmes.find((x) => x.churchId === admin.churchId && x.sabbathDate === input.date);
-  if (!p) {
-    p = {
-      id: newId("pg"),
-      churchId: admin.churchId,
-      sabbathDate: input.date,
-      status: "draft",
-      updatedAt: now,
-      updatedByRole: admin.role,
-      items,
-    };
-    store.programmes.push(p);
-  }
-  p.items = items;
-  p.updatedAt = now;
-  p.updatedByRole = admin.role;
-  if (input.publish) {
-    p.status = "published";
-    store.activity.unshift({
-      id: newId("ac"),
-      churchId: admin.churchId,
-      at: now,
-      tone: "default",
-      actor: "you",
-      action: "published",
-      subject: input.date,
-    });
-  }
+  const saved = await data.saveProgramme(admin, {
+    date: input.date,
+    items: cleanItems(input.items),
+    publish: input.publish,
+  });
   done();
-  return { savedAt: now, status: p.status };
+  return saved;
 }
 
 /** Starts a week from last week's programme, its times only, or the church template. */
 export async function startProgramme(date: string, mode: "copy" | "times" | "template") {
   const admin = await requireAdmin("programme.edit");
   if (!YMD.test(date)) throw new Error("Invalid date");
-  const store = db();
-  const previous = store.programmes
-    .filter((p) => p.churchId === admin.churchId && p.sabbathDate < date)
-    .sort((a, b) => b.sabbathDate.localeCompare(a.sabbathDate))[0];
+  const previous = (await data.listProgrammes(admin.churchId)).find((p) => p.sabbathDate < date);
   const base = previous?.items ?? TEMPLATE;
   const items = structuredClone(mode === "template" ? TEMPLATE : base).map((it) => ({
     ...it,
-    id: newId("it"),
+    id: "",
     roles: it.roles.map((r) => ({
       ...r,
-      id: newId("r"),
+      id: "",
       value: mode === "copy" && r.roleKey !== "sermon_title" ? r.value : null,
     })),
   }));
@@ -122,12 +111,24 @@ const role = (roleKey: RoleKey, optional = false) => ({ id: "", roleKey, value: 
 
 /** The standard Sabbath order used by "Use church template". */
 const TEMPLATE: ProgrammeItem[] = [
-  { id: "", kind: "sabbath_school", startTime: "08:30", roles: [role("superintendent"), role("mission_story"), role("lesson")] },
+  {
+    id: "",
+    kind: "sabbath_school",
+    startTime: "08:30",
+    roles: [role("superintendent"), role("mission_story"), role("lesson")],
+  },
   {
     id: "",
     kind: "divine_service",
     startTime: "11:00",
-    roles: [role("preacher"), role("sermon_title", true), role("platform_elder"), role("song_leader"), role("deacons"), role("special_music")],
+    roles: [
+      role("preacher"),
+      role("sermon_title", true),
+      role("platform_elder"),
+      role("song_leader"),
+      role("deacons"),
+      role("special_music"),
+    ],
   },
   { id: "", kind: "ay", startTime: "15:00", roles: [role("leader"), role("theme")] },
 ];
@@ -138,23 +139,11 @@ export async function postAnnouncement(form: FormData) {
   const body = text(form.get("body"), 500);
   if (!title || !body) throw new Error("Missing fields");
   const hideAfter = form.get("hideAfterOn") === "on" ? text(form.get("hideAfter"), 10) : "";
-  db().announcements.unshift({
-    id: newId("an"),
-    churchId: admin.churchId,
+  await data.postAnnouncement(admin, {
     title,
     body,
-    postedAt: new Date().toISOString(),
     // End of the chosen day in Nairobi.
     hideAfter: YMD.test(hideAfter) ? new Date(`${hideAfter}T23:59:00+03:00`).toISOString() : null,
-  });
-  db().activity.unshift({
-    id: newId("ac"),
-    churchId: admin.churchId,
-    at: new Date().toISOString(),
-    tone: "default",
-    actor: "you",
-    action: "posted",
-    subject: title,
   });
   done();
   redirect("/admin/posts?posted=announcement");
@@ -171,9 +160,7 @@ export async function addEvent(form: FormData) {
   const at = (hm: string) => new Date(`${date}T${hm}:00+03:00`).toISOString();
   const endsAt = HM.test(ends) ? at(ends) : null;
   const customHide = text(form.get("hideDate"), 10);
-  db().events.push({
-    id: newId("ev"),
-    churchId: admin.churchId,
+  await data.addEvent(admin, {
     title,
     startsAt: at(starts),
     endsAt,
@@ -189,8 +176,7 @@ export async function addEvent(form: FormData) {
 
 export async function setCategoryEnabled(id: string, enabled: boolean) {
   const admin = await requireAdmin("giving.edit");
-  const c = db().givingCategories.find((x) => x.id === id && x.churchId === admin.churchId);
-  if (c) c.enabled = enabled;
+  await data.setCategoryEnabled(admin, id, enabled);
   done();
 }
 
@@ -198,27 +184,13 @@ export async function addCategory(form: FormData) {
   const admin = await requireAdmin("giving.edit");
   const label = text(form.get("label"), 40);
   if (!label) return;
-  const list = db().givingCategories.filter((c) => c.churchId === admin.churchId);
-  db().givingCategories.push({
-    id: newId("gc"),
-    churchId: admin.churchId,
-    key: null,
-    label,
-    enabled: true,
-    position: list.length,
-  });
+  await data.addCategory(admin, label);
   done();
 }
 
 export async function moveMethod(id: string, direction: -1 | 1) {
   const admin = await requireAdmin("giving.edit");
-  const list = db()
-    .paymentMethods.filter((m) => m.churchId === admin.churchId)
-    .sort((a, b) => a.position - b.position);
-  const i = list.findIndex((m) => m.id === id);
-  const j = i + direction;
-  if (i < 0 || j < 0 || j >= list.length) return;
-  [list[i]!.position, list[j]!.position] = [list[j]!.position, list[i]!.position];
+  await data.moveMethod(admin, id, direction);
   done();
 }
 
@@ -234,12 +206,8 @@ export async function requestMethodChange(form: FormData) {
   for (const [k, v] of form.entries()) {
     if (k.startsWith("account:")) accounts[k.slice(8)] = text(v, 20).toUpperCase();
   }
-  db().pendingGivingChanges.push({
-    id: newId("chg"),
-    churchId: admin.churchId,
+  await data.requestMethodChange(admin, {
     methodId,
-    requestedBy: admin.id,
-    requestedAt: new Date().toISOString(),
     remove: Boolean(methodId) && form.get("intent") === "remove",
     change: {
       type: (text(form.get("type"), 10) || "paybill") as "paybill" | "till" | "bank",
@@ -256,23 +224,16 @@ export async function requestMethodChange(form: FormData) {
 
 const INVITE_ROLES: AdminRole[] = ["communication", "treasurer", "elder", "clerk"];
 
-export async function inviteAdmin(_prev: { error?: string; sentTo?: string } | null, form: FormData) {
+export async function inviteAdmin(
+  _prev: { error?: string; sentTo?: string } | null,
+  form: FormData,
+) {
   const admin = await requireAdmin("team.invite");
   const phone = normalizeKenyanPhone(text(form.get("phone"), 20));
   const role = text(form.get("role"), 20) as AdminRole;
   if (!phone) return { error: "phone" };
   if (!INVITE_ROLES.includes(role)) return { error: "role" };
-  db().admins.push({
-    id: newId("ad"),
-    churchId: admin.churchId,
-    userId: null,
-    name: null,
-    phone,
-    role,
-    isOwner: false,
-    status: "invited",
-    invitedAt: new Date().toISOString(),
-  });
+  await data.inviteAdmin(admin, phone, role);
   // SMS delivery (Africa's Talking) is wired when the SMS provider is chosen.
   done();
   return { sentTo: phone };
@@ -280,16 +241,7 @@ export async function inviteAdmin(_prev: { error?: string; sentTo?: string } | n
 
 export async function handOver(form: FormData) {
   const admin = await requireAdmin("ownership.handover");
-  const to = db().admins.find(
-    (a) => a.id === text(form.get("to"), 40) && a.churchId === admin.churchId && a.status === "active",
-  );
-  if (!to || to.id === admin.id) throw new Error("Choose an active admin");
-  to.isOwner = true;
-  const me = db().admins.find((a) => a.id === admin.id)!;
-  me.isOwner = false;
-  if (form.get("after") === "leave") {
-    db().admins.splice(db().admins.indexOf(me), 1);
-  }
+  await data.handOver(admin, text(form.get("to"), 40), form.get("after") === "leave");
   done();
   redirect(form.get("after") === "leave" ? "/" : "/admin/team");
 }

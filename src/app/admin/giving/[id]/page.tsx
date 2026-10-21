@@ -1,8 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { PaymentMethodForm } from "@/components/admin/PaymentMethodForm";
-import { getCurrentAdmin, getGivingSettings } from "@/lib/data";
+import { getGivingSettings } from "@/lib/data";
 import { can } from "@/lib/permissions";
+import { requireCurrentAdmin } from "@/lib/session";
 
 export async function generateMetadata() {
   return { title: (await getTranslations("givingAdmin"))("methodTitle") };
@@ -10,11 +11,13 @@ export async function generateMetadata() {
 
 /** Edit (or, at /admin/giving/new, add) a payment method. Changes wait for a second admin. */
 export default async function PaymentMethodPage({ params }: { params: Promise<{ id: string }> }) {
-  const admin = (await getCurrentAdmin())!;
+  const admin = await requireCurrentAdmin();
   if (!can(admin, "giving.edit", admin.churchId)) redirect("/admin/giving");
   const { id } = await params;
   const { methods, categories } = await getGivingSettings(admin.churchId);
   const method = id === "new" ? null : methods.find((m) => m.id === id);
   if (id !== "new" && !method) notFound();
-  return <PaymentMethodForm method={method ?? null} categories={categories.filter((c) => c.enabled)} />;
+  return (
+    <PaymentMethodForm method={method ?? null} categories={categories.filter((c) => c.enabled)} />
+  );
 }

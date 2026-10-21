@@ -8,8 +8,17 @@ import { AppearanceRow, LowDataRow } from "@/components/shell/Preferences";
 import { PageTitle, Screen, TopBar } from "@/components/shell/Screen";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { Avatar, Badge, Card, Group, GroupHeading, IconTile, RowLink } from "@/components/ui/primitives";
+import {
+  Avatar,
+  Badge,
+  Card,
+  Group,
+  GroupHeading,
+  IconTile,
+  RowLink,
+} from "@/components/ui/primitives";
 import { getChurchById, getCurrentAdmin } from "@/lib/data";
+import { countUnread, isPlatformAdmin } from "@/lib/data/platform";
 import { formatKenyanPhone } from "@/lib/phone";
 import { getFollowing, getSignedInMember } from "@/lib/session";
 
@@ -20,7 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ProfilePage() {
   const t = await getTranslations("me");
   const member = await getSignedInMember();
-  const admin = member ? await getCurrentAdmin() : null;
+  const [admin, unread, staff] = member
+    ? await Promise.all([getCurrentAdmin(), countUnread(), isPlatformAdmin()])
+    : [null, 0, false];
   const churches = (await Promise.all((await getFollowing()).map(getChurchById))).filter(
     (c) => c !== null,
   );
@@ -92,6 +103,13 @@ export default async function ProfilePage() {
       )}
 
       <Group>
+        {member && (
+          <RowLink href="/me/messages">
+            <IconTile icon="chat" tone="neutral" />
+            <p className="min-w-0 flex-1 text-[15px] leading-5 font-semibold">{t("messages")}</p>
+            {unread > 0 && <Badge tone="warn">{t("unread", { count: unread })}</Badge>}
+          </RowLink>
+        )}
         <RowLink href="/me/notifications">
           <IconTile icon="bell" tone="neutral" />
           <p className="min-w-0 flex-1 text-[15px] leading-5 font-semibold">{t("notifications")}</p>
@@ -108,6 +126,12 @@ export default async function ProfilePage() {
             {admin ? t("manageChurch") : t("registerChurch")}
           </p>
         </RowLink>
+        {staff && (
+          <RowLink href="/platform">
+            <IconTile icon="shield" tone="neutral" />
+            <p className="min-w-0 flex-1 text-[15px] leading-5 font-semibold">{t("platform")}</p>
+          </RowLink>
+        )}
       </Group>
 
       {member && (

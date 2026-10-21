@@ -2,12 +2,13 @@ import { getTranslations } from "next-intl/server";
 import { AdminNav } from "@/components/shell/BottomNav";
 import { Screen, TopBar, PageTitle } from "@/components/shell/Screen";
 import { Badge, Group, IconTile, RowLink } from "@/components/ui/primitives";
-import { getChurchById, getCurrentAdmin } from "@/lib/data";
+import { getChurchById } from "@/lib/data";
 import { can } from "@/lib/permissions";
+import { requireCurrentAdmin } from "@/lib/session";
 
 /** Phone "More" tab. Members roll and Transfers (Phase 2) slot in here without a navigation rebuild. */
 export default async function AdminMorePage() {
-  const admin = (await getCurrentAdmin())!;
+  const admin = await requireCurrentAdmin();
   const church = (await getChurchById(admin.churchId))!;
   const t = await getTranslations("adminNav");
   const tc = await getTranslations("common");

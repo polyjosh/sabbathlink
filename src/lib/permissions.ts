@@ -71,9 +71,12 @@ export function canApproveGivingChange(
   return can(approver, "giving.approve", change.churchId);
 }
 
-/** Payment details are public only once a platform admin has verified the church. */
-export function isGivingVisible(church: Pick<Church, "status">) {
-  return church.status === "verified";
+/**
+ * Payment details are public only once a platform admin has verified the
+ * church, and not while staff have hidden them.
+ */
+export function isGivingVisible(church: Pick<Church, "status" | "givingHidden">) {
+  return church.status === "verified" && !church.givingHidden;
 }
 
 /**

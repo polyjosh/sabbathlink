@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ProgrammeEditor } from "@/components/admin/ProgrammeEditor";
 import { StartWeek } from "@/components/admin/StartWeek";
-import { getChurchById, getCurrentAdmin, getProgramme } from "@/lib/data";
-import { db } from "@/lib/data/store";
+import { extraRecentPeople, getChurchById, getProgramme, listProgrammes } from "@/lib/data";
 import { can } from "@/lib/permissions";
 import { programmeCounts } from "@/lib/programme";
 import { addDays, formatDate, nairobiDate, nextSabbath } from "@/lib/time";
 import type { Locale } from "@/lib/types";
+import { requireCurrentAdmin } from "@/lib/session";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("adminNav"))("programme") };
@@ -21,7 +21,7 @@ export default async function ProgrammePage({
 }: {
   searchParams: Promise<{ week?: string }>;
 }) {
-  const admin = (await getCurrentAdmin())!;
+  const admin = await requireCurrentAdmin();
   if (!can(admin, "programme.edit", admin.churchId)) redirect("/admin");
   const church = (await getChurchById(admin.churchId))!;
   const locale = (await getLocale()) as Locale;
@@ -29,12 +29,12 @@ export default async function ProgrammePage({
   const week = requested && YMD.test(requested) ? requested : nextSabbath();
   const programme = await getProgramme(church.id, week);
 
-  const all = db().programmes.filter((p) => p.churchId === church.id);
-  const previous = all
-    .filter((p) => p.sabbathDate < week)
-    .sort((a, b) => b.sabbathDate.localeCompare(a.sabbathDate))[0];
+  // Newest first.
+  const all = await listProgrammes(church.id);
+  const previous = all.find((p) => p.sabbathDate < week);
 
-  const fmt = (ymd: string, opts: Intl.DateTimeFormatOptions) => formatDate(nairobiDate(ymd), locale, opts);
+  const fmt = (ymd: string, opts: Intl.DateTimeFormatOptions) =>
+    formatDate(nairobiDate(ymd), locale, opts);
 
   if (!programme) {
     return (
@@ -57,16 +57,17 @@ export default async function ProgrammePage({
 
   // People who recently filled each role, newest first, for the picker.
   const recent: Record<string, { name: string; lastOn: string }[]> = {};
-  for (const p of [...all].sort((a, b) => b.sabbathDate.localeCompare(a.sabbathDate))) {
+  for (const p of all) {
     if (p.sabbathDate >= week) continue;
     for (const it of p.items)
       for (const r of it.roles) {
         if (!r.value || r.roleKey === "sermon_title" || r.roleKey === "theme") continue;
         const list = (recent[r.roleKey] ??= []);
-        if (!list.some((x) => x.name === r.value)) list.push({ name: r.value, lastOn: p.sabbathDate });
+        if (!list.some((x) => x.name === r.value))
+          list.push({ name: r.value, lastOn: p.sabbathDate });
       }
   }
-  for (const [key, people] of Object.entries(db().recentPeople)) {
+  for (const [key, people] of Object.entries(await extraRecentPeople())) {
     const list = (recent[key] ??= []);
     for (const person of people) if (!list.some((x) => x.name === person.name)) list.push(person);
   }
@@ -85,7 +86,12 @@ export default async function ProgrammePage({
       recent={Object.fromEntries(
         Object.entries(recent).map(([k, v]) => [
           k,
-          v.slice(0, 5).map((p) => ({ name: p.name, lastOn: fmt(p.lastOn, { day: "numeric", month: "short" }) })),
+          v
+            .slice(0, 5)
+            .map((p) => ({
+              name: p.name,
+              lastOn: fmt(p.lastOn, { day: "numeric", month: "short" }),
+            })),
         ]),
       )}
       weeks={weekStrip(week, locale)}
@@ -97,6 +103,9 @@ export default async function ProgrammePage({
 function weekStrip(week: string, locale: Locale) {
   return [-7, 0, 7].map((d) => {
     const date = addDays(week, d);
-    return { date, label: formatDate(nairobiDate(date), locale, { day: "numeric", month: "short" }) };
+    return {
+      date,
+      label: formatDate(nairobiDate(date), locale, { day: "numeric", month: "short" }),
+    };
   });
 }
