@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { formatKenyanPhone } from "../phone";
 import { getAuthClaims, getSupabase, isSupabaseConfigured } from "../supabase/server";
 import type { AdminRole, ChurchStatus, ItemKind, ServiceTime, Weekday } from "../types";
 
@@ -288,10 +289,7 @@ export async function getChurchDetail(id: string) {
         .eq("church_id", id)
         .order("requested_at", { ascending: false })
         .limit(10),
-      sb
-        .from("service_times")
-        .select("kind, title, day, time")
-        .eq("church_id", id),
+      sb.from("service_times").select("kind, title, day, time").eq("church_id", id),
     ]);
 
   const adminRows = must(admins) as {
@@ -575,7 +573,8 @@ export async function listAudit(
     churchName: r.churches?.name ?? null,
     actorId: r.actor_id,
     actorName: r.actor_id
-      ? people.get(r.actor_id)?.name || people.get(r.actor_id)?.phone || null
+      ? people.get(r.actor_id)?.name ||
+        (people.get(r.actor_id)?.phone ? formatKenyanPhone(people.get(r.actor_id)!.phone!) : null)
       : null,
   }));
 }
