@@ -95,7 +95,10 @@ export function AdminNav() {
             href: "/admin/more",
             icon: "more",
             label: t("more"),
-            match: (p) => p.startsWith("/admin/more") || p.startsWith("/admin/team"),
+            match: (p) =>
+              p.startsWith("/admin/more") ||
+              p.startsWith("/admin/team") ||
+              p.startsWith("/admin/songs"),
           },
         ]}
       />

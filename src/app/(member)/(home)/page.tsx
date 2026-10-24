@@ -8,8 +8,9 @@ import { ShareLink } from "@/components/church/ShareLink";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { LogoMark } from "@/components/ui/Logo";
-import { Avatar, Badge, Card } from "@/components/ui/primitives";
+import { Avatar, Badge, Banner, Card } from "@/components/ui/primitives";
 import { getChurchById, getUpcomingProgramme, listEvents } from "@/lib/data";
+import { isSongServiceLive } from "@/lib/data/songs";
 import { directionsUrl } from "@/lib/geo";
 import { itemTitle, leadRole, roleLabel, SITE_URL, type ProgrammeT } from "@/lib/programme";
 import { getFollowing, getSignedInMember } from "@/lib/session";
@@ -90,6 +91,7 @@ export default async function HomePage() {
   }
 
   const programme = await getUpcomingProgramme(myChurch.id);
+  const songLive = await isSongServiceLive(myChurch.id);
   const [nextEvent] = await listEvents(myChurch.id);
   const pt = tp as unknown as ProgrammeT;
   const summary = programme?.items.filter((i) => i.kind !== "vespers").slice(0, 3) ?? [];
@@ -100,6 +102,18 @@ export default async function HomePage() {
   return (
     <Screen top={top} banner={<OfflineBanner />} nav={<MemberNav />}>
       {search}
+      {songLive && (
+        <Link href={`/churches/${myChurch.slug}/songs`} className="no-underline">
+          <Banner
+            tone="success"
+            icon="music"
+            className="rounded-xl"
+            action={<Icon name="right" size={18} />}
+          >
+            {t("songLive", { church: myChurch.shortName })}
+          </Banner>
+        </Link>
+      )}
 
       <section
         aria-label={t("myChurch")}

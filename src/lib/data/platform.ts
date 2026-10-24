@@ -1,5 +1,9 @@
 import "server-only";
+import { getTranslations } from "next-intl/server";
 import { cache } from "react";
+import { SITE_URL } from "../programme";
+import { isSmsConfigured, sendSms } from "../sms/africastalking";
+import { smsText } from "../sms/text";
 import { formatKenyanPhone } from "../phone";
 import { getAuthClaims, getSupabase, isSupabaseConfigured } from "../supabase/server";
 import type { AdminRole, ChurchStatus, ItemKind, ServiceTime, Weekday } from "../types";
@@ -511,9 +515,19 @@ export async function listSentMessages() {
     sent_at: string;
     churches: { name: string } | null;
   }[];
-  const people = await peopleById(rows.map((r) => r.sender_id));
+  const [people, counts] = await Promise.all([
+    peopleById(rows.map((r) => r.sender_id)),
+    rows.some((r) => r.send_sms) ? rpc("platform_sms_counts", {}) : Promise.resolve([]),
+  ]);
+  const sms = new Map(
+    (counts as { message_id: string; queued: number; sent: number; failed: number }[]).map((c) => [
+      c.message_id,
+      c,
+    ]),
+  );
   return rows.map((r) => ({
     id: r.id,
+    sms: sms.get(r.id) ?? null,
     audience: r.audience,
     churchName: r.churches?.name ?? null,
     title: r.title,
@@ -622,6 +636,49 @@ export async function sendMessage(input: {
     p_body: input.body,
     p_sms: input.sms,
   })) as number;
+}
+
+/**
+ * Sends waiting SMS through Africa's Talking, as the signed-in staff member:
+ * the database hands out each person's number only to platform admins, and
+ * marks rows as taken so two sends at once never text anyone twice.
+ */
+export async function sendWaitingSms() {
+  const total = { sent: 0, failed: 0 };
+  if (!isSmsConfigured()) return total;
+  const [en, sw] = await Promise.all([
+    getTranslations({ locale: "en", namespace: "sms" }),
+    getTranslations({ locale: "sw", namespace: "sms" }),
+  ]);
+  const url = `${SITE_URL.replace(/^https?:\/\//, "")}/me/messages`;
+  const stop = `${en("stop")} / ${sw("stop")}: ${url}`;
+
+  // 10 rounds of 200 covers a pilot-sized "everyone"; the rest stays waiting.
+  for (let round = 0; round < 10; round++) {
+    const rows = (await rpc("platform_take_sms", { p_limit: 200 })) as {
+      message_id: string;
+      user_id: string;
+      phone: string;
+      title: string;
+      body: string;
+    }[];
+    if (rows.length === 0) break;
+    const byMessage = Map.groupBy(rows, (r) => r.message_id);
+    const outcome: { message_id: string; user_id: string; sent: boolean }[] = [];
+    for (const group of byMessage.values()) {
+      const results = await sendSms(
+        group.map((r) => r.phone),
+        smsText(group[0]!.title, group[0]!.body, stop),
+      );
+      const sent = new Set(results.filter((x) => x.sent).map((x) => x.phone));
+      for (const r of group) {
+        outcome.push({ message_id: r.message_id, user_id: r.user_id, sent: sent.has(r.phone) });
+      }
+    }
+    await rpc("platform_record_sms", { p: outcome });
+    for (const o of outcome) total[o.sent ? "sent" : "failed"]++;
+  }
+  return total;
 }
 
 // ---------------------------------------------------------------- member inbox

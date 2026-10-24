@@ -27,6 +27,7 @@ export function AdminSidebar({
     { href: "/admin", icon: "grid", label: t("dashboard"), show: true },
     { href: "/admin/programme", icon: "cal", label: t("programme"), show: caps.has("programme.edit") },
     { href: "/admin/posts", icon: "mega", label: t("eventsPosts"), show: caps.has("posts.edit") },
+    { href: "/admin/songs", icon: "music", label: t("songs"), show: caps.has("programme.edit") },
     { href: "/admin/giving", icon: "heart", label: t("giving"), show: caps.has("giving.view") },
     { href: "/admin/team", icon: "users", label: t("team"), show: caps.has("team.invite") },
   ];

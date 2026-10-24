@@ -4,6 +4,7 @@ import { PlatformPage } from "@/components/platform/Page";
 import { getPerson, listChurchNames } from "@/lib/data/platform";
 import { formatKenyanPhone } from "@/lib/phone";
 import { sendMessage } from "../../actions";
+import { isSmsConfigured } from "@/lib/sms/africastalking";
 import { requireStaff } from "../../guard";
 import { noticeFrom } from "../../notice";
 
@@ -39,7 +40,7 @@ export default async function NewMessage({
               : null
           }
           // No SMS provider is connected yet (CLAUDE.md: Africa's Talking, to be chosen).
-          smsReady={false}
+          smsReady={isSmsConfigured()}
         />
       </div>
     </PlatformPage>

@@ -21,6 +21,7 @@ import { getChurchById, getCurrentAdmin } from "@/lib/data";
 import { countUnread, isPlatformAdmin } from "@/lib/data/platform";
 import { formatKenyanPhone } from "@/lib/phone";
 import { getFollowing, getSignedInMember } from "@/lib/session";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("me"))("title") };
@@ -28,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ProfilePage() {
   const t = await getTranslations("me");
+  const supabase = isSupabaseConfigured();
   const member = await getSignedInMember();
   const [admin, unread, staff] = member
     ? await Promise.all([getCurrentAdmin(), countUnread(), isPlatformAdmin()])
@@ -130,6 +132,21 @@ export default async function ProfilePage() {
           <RowLink href="/platform">
             <IconTile icon="shield" tone="neutral" />
             <p className="min-w-0 flex-1 text-[15px] leading-5 font-semibold">{t("platform")}</p>
+          </RowLink>
+        )}
+      </Group>
+
+      <Group>
+        <RowLink href="/privacy">
+          <IconTile icon="eye" tone="neutral" />
+          <p className="min-w-0 flex-1 text-[15px] leading-5 font-semibold">{t("privacy")}</p>
+        </RowLink>
+        {member && supabase && (
+          <RowLink href="/me/delete">
+            <IconTile icon="trash" tone="neutral" />
+            <p className="min-w-0 flex-1 text-[15px] leading-5 font-semibold">
+              {t("deleteAccount")}
+            </p>
           </RowLink>
         )}
       </Group>

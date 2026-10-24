@@ -4,7 +4,10 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { BackButton } from "@/components/shell/BackButton";
 import { MarkInboxRead } from "@/components/shell/MarkInboxRead";
 import { Screen, TopBar } from "@/components/shell/Screen";
+import { Button } from "@/components/ui/Button";
 import { Badge, Card, EmptyState } from "@/components/ui/primitives";
+import { setSmsOptOut } from "@/lib/actions";
+import { getAccountSettings } from "@/lib/data/account";
 import { listInbox } from "@/lib/data/platform";
 import { getSignedInMember } from "@/lib/session";
 import { formatDate } from "@/lib/time";
@@ -19,7 +22,7 @@ export default async function InboxPage() {
   if (!(await getSignedInMember())) redirect("/sign-in?next=/me/messages");
   const t = await getTranslations("inbox");
   const locale = (await getLocale()) as Locale;
-  const messages = await listInbox();
+  const [messages, settings] = await Promise.all([listInbox(), getAccountSettings()]);
   const unread = messages.some((m) => !m.readAt);
 
   return (
@@ -32,6 +35,20 @@ export default async function InboxPage() {
       }
     >
       {unread && <MarkInboxRead />}
+      {settings && (
+        <Card className="flex-row flex-wrap items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[15px] leading-5 font-bold">{t("smsTitle")}</p>
+            <p className="t-caption">{settings.smsOptOut ? t("smsOffBody") : t("smsOnBody")}</p>
+          </div>
+          <form action={setSmsOptOut}>
+            <input type="hidden" name="optOut" value={String(!settings.smsOptOut)} />
+            <Button type="submit" size="sm" variant="secondary">
+              {settings.smsOptOut ? t("turnOn") : t("turnOff")}
+            </Button>
+          </form>
+        </Card>
+      )}
       {messages.length === 0 ? (
         <EmptyState icon="chat" title={t("empty")} className="pt-10">
           <p>{t("emptyBody")}</p>
