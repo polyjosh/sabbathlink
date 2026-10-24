@@ -1,14 +1,17 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { ChoristerCard } from "@/components/admin/ChoristerCard";
 import { ProgrammeEditor } from "@/components/admin/ProgrammeEditor";
 import { StartWeek } from "@/components/admin/StartWeek";
 import { extraRecentPeople, getChurchById, getProgramme, listProgrammes } from "@/lib/data";
+import { getChorister, listRecentChoristers } from "@/lib/data/songs";
 import { can } from "@/lib/permissions";
 import { programmeCounts } from "@/lib/programme";
 import { addDays, formatDate, nairobiDate, nextSabbath } from "@/lib/time";
 import type { Locale } from "@/lib/types";
 import { requireCurrentAdmin } from "@/lib/session";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("adminNav"))("programme") };
@@ -72,9 +75,19 @@ export default async function ProgrammePage({
     for (const person of people) if (!list.some((x) => x.name === person.name)) list.push(person);
   }
 
+  // Song Service needs the database's session rules, so only with Supabase.
+  const chorister = isSupabaseConfigured() ? (
+    <ChoristerCard
+      week={week}
+      initial={await getChorister(church.id, week)}
+      recent={await listRecentChoristers(church.id, week)}
+    />
+  ) : null;
+
   return (
     <ProgrammeEditor
       key={week}
+      chorister={chorister}
       week={week}
       dateShort={fmt(week, { weekday: "short", day: "numeric", month: "short" })}
       dateLong={fmt(week, { day: "numeric", month: "long" })}

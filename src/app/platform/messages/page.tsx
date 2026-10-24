@@ -1,11 +1,13 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { PlatformPage } from "@/components/platform/Page";
-import { ButtonLink } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { Badge, Card, EmptyState } from "@/components/ui/primitives";
 import { listSentMessages } from "@/lib/data/platform";
+import { isSmsConfigured } from "@/lib/sms/africastalking";
 import { formatDate } from "@/lib/time";
 import type { Locale } from "@/lib/types";
 import { requireStaff } from "../guard";
+import { sendWaitingSms } from "../actions";
 import { noticeFrom } from "../notice";
 
 export async function generateMetadata() {
@@ -22,6 +24,8 @@ export default async function PlatformMessages({
   const tc = await getTranslations("platform.compose");
   const locale = (await getLocale()) as Locale;
   const messages = await listSentMessages();
+  const waiting = messages.reduce((n, m) => n + (m.sms?.queued ?? 0), 0);
+  const smsReady = isSmsConfigured();
 
   return (
     <PlatformPage
@@ -34,6 +38,20 @@ export default async function PlatformMessages({
         </ButtonLink>
       }
     >
+      {waiting > 0 && (
+        <Card className="flex-row flex-wrap items-center gap-3">
+          <p className="t-small min-w-0 flex-1">
+            {smsReady ? t("messages.waiting", { count: waiting }) : tc("smsNotReady")}
+          </p>
+          {smsReady && (
+            <form action={sendWaitingSms}>
+              <Button type="submit" size="sm" variant="secondary" icon="send">
+                {t("messages.sendWaiting")}
+              </Button>
+            </form>
+          )}
+        </Card>
+      )}
       {messages.length === 0 ? (
         <Card>
           <EmptyState icon="send" title={t("messages.none")} />
@@ -44,7 +62,15 @@ export default async function PlatformMessages({
             <Card key={m.id} as="article">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="t-subhead min-w-0 flex-1">{m.title}</h2>
-                {m.sendSms && <Badge tone="warn">{t("messages.smsQueued")}</Badge>}
+                {m.sms && m.sms.queued > 0 && (
+                  <Badge tone="warn">{t("messages.smsQueued", { count: m.sms.queued })}</Badge>
+                )}
+                {m.sms && m.sms.sent > 0 && (
+                  <Badge tone="success">{t("messages.smsSent", { count: m.sms.sent })}</Badge>
+                )}
+                {m.sms && m.sms.failed > 0 && (
+                  <Badge tone="danger">{t("messages.smsFailed", { count: m.sms.failed })}</Badge>
+                )}
               </div>
               <p className="t-small whitespace-pre-line">{m.body}</p>
               <p className="t-caption">

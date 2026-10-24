@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getMember } from "@/lib/data";
+import { hasCurrentConsent } from "@/lib/data/account";
 import { adoptVisitorState } from "@/lib/data/supabase";
 import { normalizeKenyanPhone } from "@/lib/phone";
 import { FOLLOW_COOKIE, SESSION_COOKIE, WELCOMED_COOKIE, getVisitorFollowing } from "@/lib/session";
@@ -55,6 +56,9 @@ export async function verifyCode(_prev: AuthState, form: FormData): Promise<Auth
     if (error) return { error: "code" };
     await adoptVisitorState(await getVisitorFollowing());
     store.delete(FOLLOW_COOKIE);
+    if (!(await hasCurrentConsent())) {
+      redirect(`/consent?next=${encodeURIComponent(safeNext(form.get("next")))}`);
+    }
   } else if (isDemoSignInAllowed()) {
     store.set(SESSION_COOKIE, "demo", { path: "/", maxAge: YEAR, sameSite: "lax", httpOnly: true });
     // The demo member already follows two churches; keep any the visitor chose.

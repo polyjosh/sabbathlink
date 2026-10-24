@@ -41,5 +41,7 @@ export async function proxy(request: NextRequest) {
 export const config = {
   // Pages only: not Next.js internals (assets, hot reload), the service worker,
   // the manifest or images.
-  matcher: ["/((?!_next/|favicon.ico|icon.svg|sw.js|manifest.webmanifest|.*\.(?:png|jpg|jpeg|svg|webp|ico)$).*)"],
+  matcher: [
+    "/((?!_next/|api/|favicon.ico|icon.svg|sw.js|manifest.webmanifest|.*\.(?:png|jpg|jpeg|svg|webp|ico)$).*)",
+  ],
 };

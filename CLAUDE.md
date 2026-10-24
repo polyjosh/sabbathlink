@@ -26,7 +26,7 @@ Tagline: *Nearer to Thee.*
 
 ## Phase 1 (MVP) scope
 
-Build this first, and nothing from later phases until Phase 1 is in use by pilot churches.
+Build this first. Phase 1.5 (live song requests) is built alongside it; nothing from Phase 2 onward until Phase 1 is in use by pilot churches.
 
 - Church accounts and profiles: name, district/conference, location with map pin, service times, contacts, photos
 - Church verification by the platform admin before the church is public and before its payment details are visible
@@ -69,15 +69,15 @@ A staff-only console at `/platform` for SabbathLink's own team (the **Platform a
 
 ## Phase 1.5: Live song requests
 
-Build after the MVP is in use. Members request songs **during Song Service**, which is led by the **Chorister of the day**. This is a live, in-service feature, not an advance queue.
+Members request songs **during Song Service**, which is led by the **Chorister of the day**. This is a live, in-service feature, not an advance queue.
 
 **Flow**
-1. The clerk or music leader assigns the Chorister of the day in the weekly programme. That person gets temporary Song Service permissions for that Sabbath.
-2. The chorister taps **Start Song Service**. Requests open and members of that church see a "Song Service is live" banner.
+1. Every Sabbath, the admin creating the weekly programme selects the Chorister of the day (name and phone number). That person gets temporary Song Service permissions for that Sabbath.
+2. On the day, an admin taps **Start Song Service**, which activates the live session. Requests open and members of that church see a "Song Service is live" banner.
 3. Members tap **Request a song**, enter the **hymn number** on a number keypad (or search by title), and send. Two or three taps, with no typing beyond the number.
 4. The chorister sees a live list: hymn number and title, request count, and the requester's name unless anonymous.
 5. The chorister taps **Next** (members see "Now singing: Hymn 245") and **Sung** (members see a tick on their request).
-6. The chorister taps **End Song Service**. The session also closes automatically after a set time.
+6. The chorister or an admin taps **End Song Service**. The session also closes automatically after a set time.
 
 **Chorister controls:** reorder or sort (order received or most requested); auto-merge duplicates ("requested by 5"); defer a request with a gentle "We'll sing it next time", never a rejection; add a request manually for members without smartphones; pause or close requests; per-person limit per session (default 2).
 
@@ -185,4 +185,4 @@ Ask before introducing heavy dependencies or switching stack choices.
 5. Build the directory, search, "near me", church detail page, and follow.
 6. Build the display-only giving section with copy buttons and custom categories.
 7. Add English and Swahili translations, then a deployment and pilot setup.
-8. After the pilot has started, build Phase 1.5 live song requests: Chorister of the day role, session start/end, member hymn-number request, chorister live list, and the real-time "Now singing" banner.
+8. Build Phase 1.5 live song requests: Chorister of the day chosen in the programme, admin session start/end, member hymn-number request, chorister live list, and the real-time "Now singing" banner.

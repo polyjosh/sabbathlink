@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { saveProgramme } from "@/app/admin/actions";
 import { AdminNav } from "@/components/shell/BottomNav";
@@ -48,6 +48,7 @@ export function ProgrammeEditor({
   initialSavedAt,
   recent,
   weeks,
+  chorister,
 }: {
   week: string;
   dateShort: string;
@@ -59,6 +60,8 @@ export function ProgrammeEditor({
   initialSavedAt: string;
   recent: Recent;
   weeks: { date: string; label: string }[];
+  /** The chorister of the day card (Song Service), when song requests are available. */
+  chorister?: ReactNode;
 }) {
   const t = useTranslations("editor");
   const tp = useTranslations("programme");
@@ -237,6 +240,7 @@ export function ProgrammeEditor({
               </section>
             );
           })}
+          {chorister}
           <WeekSwitcher weeks={weeks} current={week} />
         </Screen>
         <AdminNav />
@@ -336,6 +340,7 @@ export function ProgrammeEditor({
                 </section>
               );
             })}
+            {chorister}
             {Object.entries(recent).map(([key, people]) => (
               <datalist key={key} id={`recent-${key}`}>
                 {people.map((p) => (

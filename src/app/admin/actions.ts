@@ -3,8 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as data from "@/lib/data";
+import * as songs from "@/lib/data/songs";
 import { can, type Capability } from "@/lib/permissions";
 import { normalizeKenyanPhone } from "@/lib/phone";
+import { parseHymnList } from "@/lib/songs";
 import type { AdminRole, ItemKind, ProgrammeItem, RoleKey } from "@/lib/types";
 
 /*
@@ -244,4 +246,75 @@ export async function handOver(form: FormData) {
   await data.handOver(admin, text(form.get("to"), 40), form.get("after") === "leave");
   done();
   redirect(form.get("after") === "leave" ? "/" : "/admin/team");
+}
+
+// ---------------------------------------------------------------- Song Service (Phase 1.5)
+
+/**
+ * The chorister of the day for one Sabbath, chosen with the programme. The
+ * phone links them to their account, so they get the live list while Song
+ * Service runs. An empty name removes the chorister.
+ */
+export async function setChorister(input: { date: string; name: string; phone: string }) {
+  const admin = await requireAdmin("programme.edit");
+  if (!YMD.test(input.date)) throw new Error("Invalid date");
+  const name = text(input.name, 80);
+  const rawPhone = text(input.phone, 20);
+  const phone = rawPhone ? normalizeKenyanPhone(rawPhone) : null;
+  if (name && rawPhone && !phone) return { error: "phone" as const };
+  const chorister = name ? { name, phone } : null;
+  await songs.setChorister(admin.churchId, input.date, chorister);
+  revalidatePath("/admin", "layout");
+  return { chorister };
+}
+
+const SESSION_MINUTES = [120, 180, 240];
+
+/** Opens this Sabbath's Song Service: requests open and members see "Song Service is live". */
+export async function startSongService(form: FormData) {
+  const admin = await requireAdmin("programme.edit");
+  const minutes = Number(form.get("minutes"));
+  const result = await songs.startSongService(
+    admin.churchId,
+    SESSION_MINUTES.includes(minutes) ? minutes : 180,
+  );
+  done();
+  redirect("error" in result ? `/admin/songs?error=${result.error}` : "/admin/songs?started=1");
+}
+
+export async function setSongRequestsEnabled(on: boolean) {
+  const admin = await requireAdmin("church.edit");
+  await songs.setSongRequestsEnabled(admin.churchId, on);
+  done();
+}
+
+const LANGUAGES = ["en", "sw", "other"] as const;
+
+export async function addHymnal(form: FormData) {
+  const admin = await requireAdmin("programme.edit");
+  const name = text(form.get("name"), 60);
+  const language = LANGUAGES.find((l) => l === form.get("language")) ?? "en";
+  if (!name) redirect("/admin/songs?error=name");
+  const id = await songs.addHymnal(admin.churchId, name, language);
+  const { hymns } = parseHymnList(text(form.get("titles"), 100_000));
+  if (hymns.length) await songs.saveHymns(id, hymns);
+  done();
+  redirect(`/admin/songs?added=${hymns.length}`);
+}
+
+/** Adds pasted titles to a hymnal; RLS checks the hymnal belongs to this church. */
+export async function addHymnTitles(form: FormData) {
+  await requireAdmin("programme.edit");
+  const hymnalId = text(form.get("hymnalId"), 40);
+  const { hymns } = parseHymnList(text(form.get("titles"), 100_000));
+  if (hymns.length) await songs.saveHymns(hymnalId, hymns);
+  done();
+  redirect(`/admin/songs?added=${hymns.length}`);
+}
+
+export async function deleteHymnal(form: FormData) {
+  await requireAdmin("programme.edit");
+  await songs.deleteHymnal(text(form.get("hymnalId"), 40));
+  done();
+  redirect("/admin/songs");
 }

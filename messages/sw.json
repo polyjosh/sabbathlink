@@ -41,7 +41,8 @@
     "clerkTools": "Zana za karani",
     "membersRoll": "Orodha ya washiriki",
     "transfers": "Uhamisho",
-    "memberView": "Rudi kwa programu ya mshiriki"
+    "memberView": "Rudi kwa programu ya mshiriki",
+    "songs": "Kipindi cha Nyimbo"
   },
   "weekday": {
     "sun": "Jpili",
@@ -115,7 +116,8 @@
     "findTitle": "Tafuta kanisa lako",
     "findBody": "Fuata kanisa lako ili uone ratiba yake ya Sabato hapa kila wiki.",
     "nearMe": "Makanisa karibu nami",
-    "byTown": "Tafuta kwa mji"
+    "byTown": "Tafuta kwa mji",
+    "songLive": "Kipindi cha Nyimbo kinaendelea {church} · Omba wimbo"
   },
   "directory": {
     "title": "Makanisa",
@@ -178,7 +180,8 @@
     "notFound": "Hatukupata kanisa hilo.",
     "pendingTitle": "Kutoa kutafunguliwa baada ya uthibitisho",
     "pendingBody": "Tunakagua kila kanisa kabla ya kuonyesha namba za malipo, ili matoleo yako yafike kwenye akaunti sahihi.",
-    "pendingBody2": "Hadi wakati huo, tafadhali toa kwa njia ambayo kanisa lako hutumia kila mara."
+    "pendingBody2": "Hadi wakati huo, tafadhali toa kwa njia ambayo kanisa lako hutumia kila mara.",
+    "songLive": "Kipindi cha Nyimbo kinaendelea · Omba wimbo"
   },
   "give": {
     "trustStrong": "Malipo yanaenda moja kwa moja kwa kanisa.",
@@ -238,7 +241,9 @@
     "registerChurch": "Sajili kanisa",
     "messages": "Ujumbe",
     "unread": "{count} mpya",
-    "platform": "Msimamizi wa jukwaa"
+    "platform": "Msimamizi wa jukwaa",
+    "privacy": "Faragha",
+    "deleteAccount": "Futa akaunti"
   },
   "notifications": {
     "title": "Arifa",
@@ -396,7 +401,8 @@
     "hides": "Kinafichwa",
     "announcement": "Tangazo",
     "event": "Tukio · {date}",
-    "never": "Hakijawekwa"
+    "never": "Hakijawekwa",
+    "songService": "Kipindi cha Nyimbo"
   },
   "editor": {
     "nextSabbath": "Sabato ijayo",
@@ -706,8 +712,12 @@
     "messages": {
       "hint": "Ujumbe huenda kwenye sanduku la SabbathLink la mtu (Mimi → Ujumbe).",
       "none": "Bado hakuna ujumbe uliotumwa",
-      "smsQueued": "SMS inasubiri",
-      "recipients": "{count, plural, one {mtu #} other {watu #}}"
+      "smsQueued": "SMS {count} zinasubiri",
+      "recipients": "{count, plural, one {mtu #} other {watu #}}",
+      "smsSent": "SMS {count} zimetumwa",
+      "smsFailed": "SMS {count} hazikufika",
+      "waiting": "{count, plural, one {SMS # inasubiri} other {SMS # zinasubiri}} kutumwa.",
+      "sendWaiting": "Tuma SMS zinazosubiri"
     },
     "compose": {
       "heading": "Ujumbe mpya",
@@ -728,7 +738,7 @@
       "body": "Ujumbe",
       "counter": "{count}/600",
       "alsoSms": "Tuma pia kwa SMS",
-      "smsHint": "Inatumwa kwa kila mwenye namba ya simu katika kundi hili.",
+      "smsHint": "Inatumwa kwa kila mwenye namba ya simu katika kundi hili, isipokuwa waliozima SMS.",
       "smsNotReady": "Bado hakuna mtoa huduma wa SMS: SMS itasubiri na kutumwa akiunganishwa.",
       "serviceOnly": "Ujumbe wa huduma pekee (uthibitisho, usalama, akaunti na taarifa za huduma). Matangazo ya biashara yanahitaji idhini ya watu kwanza.",
       "send": "Tuma ujumbe"
@@ -785,7 +795,8 @@
       "ownerChanged": "Mmiliki amebadilishwa.",
       "staffAdded": "Msimamizi wa jukwaa ameongezwa.",
       "staffRemoved": "Msimamizi wa jukwaa ameondolewa.",
-      "sent": "Ujumbe umetumwa."
+      "sent": "Ujumbe umetumwa.",
+      "smsSent": "SMS zilizokuwa zikisubiri zimetumwa. Zisizokubaliwa na mtoa huduma zimewekwa alama ya kushindwa."
     },
     "error": {
       "generic": "Haikufanikiwa. Hakikisha sababu imejazwa kisha ujaribu tena.",
@@ -797,6 +808,216 @@
     "empty": "Hakuna ujumbe",
     "emptyBody": "Taarifa kutoka timu ya SabbathLink kuhusu akaunti yako au kanisa lako zinaonekana hapa.",
     "new": "Mpya",
-    "from": "Timu ya SabbathLink"
+    "from": "Timu ya SabbathLink",
+    "smsTitle": "SMS kutoka SabbathLink",
+    "smsOnBody": "Taarifa muhimu pia huja kwa SMS.",
+    "smsOffBody": "Unapata taarifa hapa tu. Nambari za kuingia bado huja kwa SMS.",
+    "turnOff": "Zima SMS",
+    "turnOn": "Washa SMS"
+  },
+  "sms": {
+    "code": "Nambari yako ya SabbathLink ni {code}. Usimpe mtu yeyote.",
+    "stop": "Acha SMS"
+  },
+  "privacy": {
+    "title": "Taarifa ya faragha",
+    "draft": "Rasimu ya kukaguliwa kabla ya uzinduzi. Itakaguliwa dhidi ya Sheria ya Ulinzi wa Data, 2019 kabla SabbathLink haijafunguliwa kwa umma.",
+    "updated": "Ilisasishwa Oktoba 2026",
+    "sections": [
+      {
+        "h": "Sisi ni nani",
+        "p": "SabbathLink husaidia makanisa nchini Kenya kushiriki ratiba, matukio na maelezo ya utoaji na washiriki. SabbathLink huamua jinsi taarifa zilizo kwenye programu zinavyotumika, na inawajibika kuzilinda."
+      },
+      {
+        "h": "Tunachokusanya",
+        "p": "Namba yako ya simu, ili uweze kuingia. Jina lako, ukiliongeza. Makanisa unayofuata. Wadhifa wako, kama wewe ni kiongozi wa kanisa. Ujumbe tunaokutumia. Barua za uthibitisho kutoka kwa wanaosajili kanisa. Kumbukumbu za kiufundi zinazohitajika kuendesha huduma kwa usalama."
+      },
+      {
+        "h": "Taarifa nyeti",
+        "p": "Kufuata kanisa huonyesha imani yako ya kidini. Sheria ya Ulinzi wa Data huichukulia kuwa taarifa nyeti. Tunaitumia tu kukuendeshea SabbathLink. Hatuiuzi kamwe, wala kuitumia kwa matangazo."
+      },
+      {
+        "h": "Nani anaweza kuiona",
+        "p": "Wewe unaona taarifa zako. Viongozi wa kanisa huona viongozi wenzao, si wanaofuata kanisa. Wafanyakazi wa SabbathLink wanaweza kuona taarifa za akaunti ili kuthibitisha makanisa na kulinda jukwaa, na kila wanapofungua taarifa za mtu inarekodiwa. Orodha za washiriki wa kanisa hazionyeshwi kwa umma kamwe."
+      },
+      {
+        "h": "Ujumbe",
+        "p": "Tunatuma ujumbe wa huduma tu: nambari za kuingia, uthibitisho, usalama na taarifa za akaunti. Huingia kwenye Mimi → Ujumbe, na baadhi pia kwa SMS. Unaweza kuzima SMS hapo; nambari za kuingia bado zitafika. Hatutatuma matangazo bila kukuuliza kwanza."
+      },
+      {
+        "h": "Wanaoshughulikia taarifa kwa niaba yetu",
+        "p": "Mtoa huduma wa hifadhidata huhifadhi taarifa, kwa sasa katika Umoja wa Ulaya, kwa kinga zinazotakiwa na sheria. Mtoa huduma wa SMS hupokea namba yako ili kuwasilisha ujumbe. Hakuna anayeruhusiwa kuzitumia kwa jambo jingine."
+      },
+      {
+        "h": "Tunazihifadhi kwa muda gani",
+        "p": "Hadi utakapofuta akaunti yako. Kumbukumbu za kazi za wafanyakazi huhifadhiwa kwa usalama, lakini hazikuonyeshi tena baada ya akaunti yako kufutwa."
+      },
+      {
+        "h": "Haki zako",
+        "p": "Unaweza kuona, kurekebisha au kufuta taarifa zako, na kupinga jinsi zinavyotumika. Ili kufuta kila kitu, nenda Mimi → Futa akaunti. Unaweza pia kulalamika kwa Ofisi ya Kamishna wa Ulinzi wa Data (ODPC)."
+      }
+    ]
+  },
+  "consent": {
+    "title": "Kabla hujaendelea",
+    "intro": "SabbathLink huhifadhi taarifa chache kukuhusu ili programu ifanye kazi:",
+    "points": [
+      "Namba yako ya simu, ili kukuingiza.",
+      "Makanisa unayofuata. Hii huonyesha imani yako, kwa hivyo tunailinda kama taarifa nyeti na hatuiuzi wala kuitumia kwa matangazo.",
+      "Ujumbe tunaokutumia kuhusu akaunti au kanisa lako."
+    ],
+    "rights": "Unaweza kuzima SMS au kufuta akaunti yako wakati wowote kwenye Mimi.",
+    "readFull": "Soma taarifa kamili ya faragha",
+    "accept": "Nakubali",
+    "decline": "Si sasa, nitoe"
+  },
+  "account": {
+    "deleteTitle": "Futa akaunti yako",
+    "deleteIntro": "Hii itafuta kabisa:",
+    "deletes": [
+      "Wasifu wako na namba ya simu",
+      "Makanisa unayofuata",
+      "Nyadhifa zako za usimamizi wa kanisa",
+      "Ujumbe wako kutoka SabbathLink"
+    ],
+    "keeps": "Ratiba na matangazo uliyoweka kwa kanisa yanabaki na kanisa hilo, bila jina lako.",
+    "ownerError": "Wewe ni mmiliki wa kanisa kwenye SabbathLink. Kwanza mkabidhi kiongozi mwingine kwenye Simamia kanisa → Timu.",
+    "confirmError": "Weka alama kwenye kisanduku kuthibitisha.",
+    "understand": "Naelewa kwamba hili haliwezi kutenduliwa",
+    "delete": "Futa akaunti yangu"
+  },
+  "songs": {
+    "title": "Kipindi cha Nyimbo",
+    "leadTitle": "Orodha ya nyimbo",
+    "hymn": "Wimbo {number}",
+    "liveBadge": "Kinaendelea sasa",
+    "until": "Maombi yanafungwa {time}",
+    "ledBy": "Kinaongozwa na {name}",
+    "openLead": "Fungua orodha ya kiongozi wa nyimbo",
+    "nowSinging": "Tunaimba sasa",
+    "signInToRequest": "Ingia ili uombe wimbo.",
+    "signIn": "Ingia",
+    "requestTitle": "Omba wimbo",
+    "left": "{count, plural, =0 {Maombi yameisha} one {Ombi # limebaki} other {Maombi # yamebaki}}",
+    "hymnal": "Kitabu cha nyimbo",
+    "searchTitle": "Tafuta kwa jina au nambari",
+    "useKeypad": "Tumia vitufe vya nambari",
+    "typeNumber": "Nambari ya wimbo",
+    "delete": "Futa tarakimu ya mwisho",
+    "send": "Tuma ombi",
+    "searchByTitle": "Tafuta kwa jina",
+    "anonymous": "Usionyeshe jina langu",
+    "sent": "Ombi la {hymn} limetumwa. Kiongozi wa nyimbo ataliona.",
+    "queuedOffline": "Hakuna mtandao. Ombi lako litatumwa mtandao ukirudi.",
+    "sentQueued": "{count, plural, one {Ombi lako lililohifadhiwa limetumwa.} other {Maombi yako # yaliyohifadhiwa yametumwa.}}",
+    "errSignin": "Ingia ili uombe wimbo.",
+    "errClosed": "Kipindi cha Nyimbo hakipokei maombi kwa sasa.",
+    "errPaused": "Kiongozi wa nyimbo amesitisha maombi kwa muda.",
+    "errFollow": "Fuata kanisa hili ili uombe nyimbo.",
+    "errLimit": "Umetumia maombi yako yote ya leo.",
+    "errGeneric": "Haikufanikiwa. Tafadhali jaribu tena.",
+    "statusWaiting": "Inasubiri",
+    "statusNow": "Tunaimba sasa",
+    "statusSung": "Umeimbwa",
+    "statusDeferred": "Tutauimba wakati ujao",
+    "yourRequests": "Maombi yako",
+    "waitingSignal": "Inasubiri mtandao",
+    "withdraw": "Ondoa ombi la {hymn}",
+    "comingUp": "Inayofuata",
+    "times": "×{count}",
+    "notLiveTitle": "Kipindi cha Nyimbo hakijaanza",
+    "endedTitle": "Kipindi cha Nyimbo kimeisha",
+    "notLiveBody": "Kikianza, unaweza kuomba nyimbo hapa.",
+    "offBody": "Kanisa hili halipokei maombi ya nyimbo kwenye programu.",
+    "unavailable": "Maombi ya nyimbo bado hayapatikani.",
+    "adminStart": "Anzisha Kipindi cha Nyimbo",
+    "leadOnlyTitle": "Kwa kiongozi wa nyimbo wa siku",
+    "leadOnlyBody": "Orodha hii ni ya kiongozi wa nyimbo wa siku na viongozi wa kanisa wakati Kipindi cha Nyimbo kinaendelea.",
+    "leadNotLiveBody": "Kiongozi wa kanisa huanzisha Kipindi cha Nyimbo siku hiyo. Orodha itafunguka hapa kikianza.",
+    "pause": "Sitisha maombi",
+    "resume": "Endelea na maombi",
+    "pausedNote": "Maombi yamesitishwa. Washiriki hawawezi kutuma mapya.",
+    "markSung": "Weka kuwa umeimbwa",
+    "nothingNow": "Gusa Ifuatayo kwenye ombi ili wote walione.",
+    "requests": "{count, plural, =0 {Maombi} other {Maombi (#)}}",
+    "order": "Mpangilio",
+    "orderReceived": "Kwa kufika",
+    "orderPopular": "Zilizoombwa zaidi",
+    "noRequests": "Hakuna maombi yanayosubiri.",
+    "addedByHand": "Imeongezwa na kiongozi wa nyimbo",
+    "anonymousName": "Bila jina",
+    "someone": "Mshiriki",
+    "requestedBy": "Imeombwa na {count}",
+    "next": "Ifuatayo",
+    "sung": "Umeimbwa",
+    "nextTime": "Wakati ujao",
+    "addTitle": "Ongeza ombi",
+    "addHint": "Kwa washiriki wasio na simu janja.",
+    "number": "Nambari",
+    "orTitle": "au jina",
+    "add": "Ongeza kwenye orodha",
+    "deferredTitle": "Kwa wakati ujao",
+    "backToList": "Rudisha kwenye orodha",
+    "sungTitle": "Zimeimbwa ({count})",
+    "limit": "Maombi kwa kila mtu",
+    "fewer": "Punguza maombi kwa kila mtu",
+    "more": "Ongeza maombi kwa kila mtu",
+    "end": "Maliza Kipindi cha Nyimbo",
+    "endConfirm": "Maliza Kipindi cha Nyimbo? Washiriki hawataweza kutuma maombi zaidi.",
+    "keepGoing": "Endelea"
+  },
+  "songsAdmin": {
+    "title": "Kipindi cha Nyimbo",
+    "needsSupabase": "Kipindi cha Nyimbo kinahitaji hifadhidata. Unganisha Supabase ili kukitumia.",
+    "startedBanner": "Kipindi cha Nyimbo kimeanza. Washiriki wanaweza kuomba nyimbo sasa.",
+    "offError": "Maombi ya nyimbo yamezimwa kwa kanisa hili.",
+    "nameError": "Andika jina la kitabu cha nyimbo.",
+    "addedBanner": "{count, plural, =0 {Imehifadhiwa. Hakuna majina yaliyopatikana.} one {Jina # limehifadhiwa.} other {Majina # yamehifadhiwa.}}",
+    "thisSabbath": "Sabato hii · {date}",
+    "choristerIs": "Kiongozi wa nyimbo wa siku: <b>{name}</b>",
+    "noChorister": "Bado hakuna kiongozi wa nyimbo wa siku",
+    "change": "Badilisha",
+    "choose": "Chagua",
+    "live": "Kinaendelea",
+    "until": "Kinafungwa {time}",
+    "openList": "Fungua orodha ya nyimbo",
+    "end": "Maliza Kipindi cha Nyimbo",
+    "startBody": "Ukianzisha, maombi ya nyimbo yanafunguliwa na washiriki wanaona \"Kipindi cha Nyimbo kinaendelea\". Kiongozi wa nyimbo wa siku anapata orodha.",
+    "endedBody": "Kipindi cha Nyimbo kimeisha. Unaweza kukianzisha tena ukihitaji.",
+    "closeAfter": "Funga chenyewe baada ya",
+    "hours": "Saa {count}",
+    "restart": "Anzisha tena",
+    "start": "Anzisha Kipindi cha Nyimbo",
+    "hymnals": "Vitabu vya nyimbo",
+    "hymnalsNote": "Washiriki huomba kwa nambari ya wimbo. Ongeza majina ili waweze kutafuta kwa jina. Tunahifadhi nambari na majina tu, kamwe si maneno wala muziki.",
+    "lang": {
+      "en": "Kiingereza",
+      "sw": "Kiswahili",
+      "other": "Nyingine"
+    },
+    "titles": "{count, plural, =0 {Hakuna majina} one {Jina #} other {Majina #}}",
+    "addTitles": "Ongeza majina",
+    "pasteTitles": "Majina ya nyimbo",
+    "pasteHint": "Moja kwa kila mstari, nambari kwanza, mfano \"245 Jina\". Unaweza kubandika kutoka kwenye jedwali.",
+    "saveTitles": "Hifadhi majina",
+    "removeHymnal": "Ondoa kitabu",
+    "addHymnal": "Ongeza kitabu cha nyimbo",
+    "hymnalName": "Jina la kitabu",
+    "language": "Lugha",
+    "enabled": "Maombi ya nyimbo",
+    "enabledOn": "Washiriki wanaweza kuomba nyimbo Kipindi cha Nyimbo kikiendelea.",
+    "enabledOff": "Yamezimwa. Washiriki hawawezi kuomba nyimbo.",
+    "chorister": "Kiongozi wa nyimbo wa siku",
+    "addChorister": "Ongeza kiongozi wa nyimbo",
+    "choristerHint": "Ataongoza Kipindi cha Nyimbo Sabato hii. Kwa nambari yake ya simu, atapata orodha ya nyimbo kiongozi wa kanisa akianzisha Kipindi cha Nyimbo.",
+    "choristerName": "Jina",
+    "choristerPhone": "Nambari ya simu",
+    "choristerPhoneHint": "Nambari anayotumia kuingia.",
+    "phoneError": "Andika nambari ya simu ya Kenya, mfano 0712 345 678.",
+    "saveChorister": "Hifadhi",
+    "recentChoristers": "Viongozi wa nyimbo wa hivi karibuni",
+    "removeChorister": "Ondoa kiongozi wa nyimbo",
+    "choristerSaved": "{name} ni kiongozi wa nyimbo wa siku",
+    "choristerRemoved": "Kiongozi wa nyimbo ameondolewa"
   }
 }

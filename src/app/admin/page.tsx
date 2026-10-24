@@ -84,6 +84,12 @@ export default async function AdminDashboard() {
       label: t("addEvent"),
       show: can(admin, "posts.edit", church.id),
     },
+    {
+      href: "/admin/songs",
+      icon: "music",
+      label: t("songService"),
+      show: can(admin, "programme.edit", church.id),
+    },
   ];
 
   const ring = (size: "sm" | "lg") => (

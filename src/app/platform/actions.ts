@@ -130,14 +130,14 @@ export async function sendMessage(form: FormData) {
   }
   const churchId = audience.startsWith("church_") ? id(form.get("church")) : null;
   const userId = audience === "person" ? id(form.get("user")) : null;
-  await run("/platform/messages", "sent", () =>
-    platform.sendMessage({
-      audience,
-      churchId,
-      userId,
-      title,
-      body,
-      sms: form.get("sms") === "on",
-    }),
-  );
+  const sms = form.get("sms") === "on";
+  await run("/platform/messages", "sent", async () => {
+    await platform.sendMessage({ audience, churchId, userId, title, body, sms });
+    // The inbox message is saved either way; SMS that don't go now stay waiting.
+    if (sms) await platform.sendWaitingSms();
+  });
+}
+
+export async function sendWaitingSms() {
+  await run("/platform/messages", "smsSent", () => platform.sendWaitingSms());
 }

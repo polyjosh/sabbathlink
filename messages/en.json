@@ -41,7 +41,8 @@
     "clerkTools": "Clerk tools",
     "membersRoll": "Members roll",
     "transfers": "Transfers",
-    "memberView": "Back to member app"
+    "memberView": "Back to member app",
+    "songs": "Song Service"
   },
   "weekday": {
     "sun": "Sun",
@@ -115,7 +116,8 @@
     "findTitle": "Find your church",
     "findBody": "Follow your church to see its Sabbath programme here every week.",
     "nearMe": "Churches near me",
-    "byTown": "Browse by town"
+    "byTown": "Browse by town",
+    "songLive": "Song Service is live at {church} · Request a song"
   },
   "directory": {
     "title": "Churches",
@@ -178,7 +180,8 @@
     "notFound": "We couldn't find that church.",
     "pendingTitle": "Giving opens after verification",
     "pendingBody": "We check every church before showing payment numbers, so your gifts reach the right account.",
-    "pendingBody2": "Until then, please give the way your church usually does."
+    "pendingBody2": "Until then, please give the way your church usually does.",
+    "songLive": "Song Service is live · Request a song"
   },
   "give": {
     "trustStrong": "Payments go directly to the church.",
@@ -238,7 +241,9 @@
     "registerChurch": "Register a church",
     "messages": "Messages",
     "unread": "{count} new",
-    "platform": "Platform admin"
+    "platform": "Platform admin",
+    "privacy": "Privacy",
+    "deleteAccount": "Delete account"
   },
   "notifications": {
     "title": "Notifications",
@@ -396,7 +401,8 @@
     "hides": "Hides",
     "announcement": "Announcement",
     "event": "Event · {date}",
-    "never": "Not set"
+    "never": "Not set",
+    "songService": "Song Service"
   },
   "editor": {
     "nextSabbath": "Next Sabbath",
@@ -706,8 +712,12 @@
     "messages": {
       "hint": "Messages go to people's SabbathLink inbox (Me → Messages).",
       "none": "No messages sent yet",
-      "smsQueued": "SMS waiting",
-      "recipients": "{count, plural, one {# person} other {# people}}"
+      "smsQueued": "{count} SMS waiting",
+      "recipients": "{count, plural, one {# person} other {# people}}",
+      "smsSent": "{count} SMS sent",
+      "smsFailed": "{count} SMS failed",
+      "waiting": "{count, plural, one {# SMS is} other {# SMS are}} waiting to be sent.",
+      "sendWaiting": "Send waiting SMS"
     },
     "compose": {
       "heading": "New message",
@@ -728,7 +738,7 @@
       "body": "Message",
       "counter": "{count}/600",
       "alsoSms": "Also send by SMS",
-      "smsHint": "Sent to everyone in the audience with a phone number.",
+      "smsHint": "Sent to everyone in the audience with a phone number, except people who turned SMS off.",
       "smsNotReady": "No SMS provider is connected yet: the SMS waits and is sent once one is set up.",
       "serviceOnly": "Service messages only (verification, safety, account and product notices). Marketing needs people's consent first.",
       "send": "Send message"
@@ -785,7 +795,8 @@
       "ownerChanged": "Owner changed.",
       "staffAdded": "Platform admin added.",
       "staffRemoved": "Platform admin removed.",
-      "sent": "Message sent."
+      "sent": "Message sent.",
+      "smsSent": "Waiting SMS sent. Any the provider didn't accept are marked failed."
     },
     "error": {
       "generic": "That didn't work. Check the reason is filled in and try again.",
@@ -797,6 +808,216 @@
     "empty": "No messages",
     "emptyBody": "Notices from the SabbathLink team about your account or church appear here.",
     "new": "New",
-    "from": "SabbathLink team"
+    "from": "SabbathLink team",
+    "smsTitle": "SMS from SabbathLink",
+    "smsOnBody": "Important notices also come by SMS.",
+    "smsOffBody": "You get notices here only. Sign-in codes still come by SMS.",
+    "turnOff": "Turn SMS off",
+    "turnOn": "Turn SMS on"
+  },
+  "sms": {
+    "code": "Your SabbathLink code is {code}. Don't share it with anyone.",
+    "stop": "Stop SMS"
+  },
+  "privacy": {
+    "title": "Privacy notice",
+    "draft": "Draft for review before launch. It will be checked against the Data Protection Act, 2019 before SabbathLink opens to the public.",
+    "updated": "Last updated October 2026",
+    "sections": [
+      {
+        "h": "Who we are",
+        "p": "SabbathLink helps churches in Kenya share their programmes, events and giving details with members. SabbathLink decides how the information in the app is used, and is responsible for protecting it."
+      },
+      {
+        "h": "What we collect",
+        "p": "Your phone number, so you can sign in. Your name, if you add it. The churches you follow. Your role, if you are a church officer. The messages we send you. Verification letters sent by people registering a church. Basic technical records needed to keep the service running and secure."
+      },
+      {
+        "h": "Sensitive information",
+        "p": "Following a church shows your religious beliefs. The Data Protection Act treats this as sensitive personal data. We use it only to run SabbathLink for you. We never sell it, and never use it for advertising."
+      },
+      {
+        "h": "Who can see it",
+        "p": "You can see your own information. Church officers see the other officers of their church, not who follows it. SabbathLink staff can see account details to verify churches and keep the platform safe, and every time they open a person's details it is recorded. Church member rolls are never public."
+      },
+      {
+        "h": "Messages",
+        "p": "We send service messages only: sign-in codes, verification, safety and account notices. They arrive in Me → Messages, and some also by SMS. You can turn SMS off there; sign-in codes still arrive. We will not send marketing without asking you first."
+      },
+      {
+        "h": "Who processes it for us",
+        "p": "Our database host stores the information, currently in the European Union, with the safeguards the law requires. Our SMS provider receives your phone number to deliver texts. Neither may use it for anything else."
+      },
+      {
+        "h": "How long we keep it",
+        "p": "Until you delete your account. Records of what staff did are kept for security, but no longer point to you once your account is deleted."
+      },
+      {
+        "h": "Your rights",
+        "p": "You can see, correct or delete your information, and object to how it is used. To delete everything, go to Me → Delete account. You can also complain to the Office of the Data Protection Commissioner (ODPC)."
+      }
+    ]
+  },
+  "consent": {
+    "title": "Before you continue",
+    "intro": "SabbathLink keeps a little information about you so the app works:",
+    "points": [
+      "Your phone number, to sign you in.",
+      "The churches you follow. This shows your faith, so we protect it as sensitive data and never sell it or use it for ads.",
+      "Messages we send you about your account or church."
+    ],
+    "rights": "You can turn SMS off or delete your account at any time in Me.",
+    "readFull": "Read the full privacy notice",
+    "accept": "I agree",
+    "decline": "Not now, sign me out"
+  },
+  "account": {
+    "deleteTitle": "Delete your account",
+    "deleteIntro": "This permanently deletes:",
+    "deletes": [
+      "Your profile and phone number",
+      "The churches you follow",
+      "Your church admin roles",
+      "Your messages from SabbathLink"
+    ],
+    "keeps": "Programmes and posts you made for a church stay with that church, without your name.",
+    "ownerError": "You own a church on SabbathLink. Hand it over to another officer in Manage church → Team first.",
+    "confirmError": "Tick the box to confirm.",
+    "understand": "I understand this can't be undone",
+    "delete": "Delete my account"
+  },
+  "songs": {
+    "title": "Song Service",
+    "leadTitle": "Live song list",
+    "hymn": "Hymn {number}",
+    "liveBadge": "Live now",
+    "until": "Requests close at {time}",
+    "ledBy": "Led by {name}",
+    "openLead": "Open the chorister's list",
+    "nowSinging": "Now singing",
+    "signInToRequest": "Sign in to request a song.",
+    "signIn": "Sign in",
+    "requestTitle": "Request a song",
+    "left": "{count, plural, =0 {No requests left} one {# request left} other {# requests left}}",
+    "hymnal": "Hymnal",
+    "searchTitle": "Search by title or number",
+    "useKeypad": "Use the number keypad",
+    "typeNumber": "Hymn no.",
+    "delete": "Delete last digit",
+    "send": "Send request",
+    "searchByTitle": "Search by title",
+    "anonymous": "Don't show my name",
+    "sent": "{hymn} requested. The chorister will see it.",
+    "queuedOffline": "No signal. Your request will be sent when you're back online.",
+    "sentQueued": "{count, plural, one {Your saved request was sent.} other {Your # saved requests were sent.}}",
+    "errSignin": "Sign in to request a song.",
+    "errClosed": "Song Service isn't taking requests right now.",
+    "errPaused": "The chorister has paused requests for now.",
+    "errFollow": "Follow this church to request songs.",
+    "errLimit": "You've used your requests for today.",
+    "errGeneric": "That didn't work. Please try again.",
+    "statusWaiting": "Waiting",
+    "statusNow": "Now singing",
+    "statusSung": "Sung",
+    "statusDeferred": "We'll sing it next time",
+    "yourRequests": "Your requests",
+    "waitingSignal": "Waiting for signal",
+    "withdraw": "Withdraw request for {hymn}",
+    "comingUp": "Coming up",
+    "times": "×{count}",
+    "notLiveTitle": "Song Service hasn't started",
+    "endedTitle": "Song Service has ended",
+    "notLiveBody": "When it starts, you can request hymns here.",
+    "offBody": "This church isn't taking song requests in the app.",
+    "unavailable": "Song requests aren't available yet.",
+    "adminStart": "Start Song Service",
+    "leadOnlyTitle": "For the chorister of the day",
+    "leadOnlyBody": "This list is for the chorister of the day and church admins while Song Service is live.",
+    "leadNotLiveBody": "A church admin starts Song Service on the day. The list opens here once it's live.",
+    "pause": "Pause requests",
+    "resume": "Resume requests",
+    "pausedNote": "Requests are paused. Members can't send new ones.",
+    "markSung": "Mark as sung",
+    "nothingNow": "Tap Next on a request to show it to everyone.",
+    "requests": "{count, plural, =0 {Requests} other {Requests (#)}}",
+    "order": "Order",
+    "orderReceived": "As received",
+    "orderPopular": "Most requested",
+    "noRequests": "No requests waiting.",
+    "addedByHand": "Added by chorister",
+    "anonymousName": "Anonymous",
+    "someone": "A member",
+    "requestedBy": "Requested by {count}",
+    "next": "Next",
+    "sung": "Sung",
+    "nextTime": "Next time",
+    "addTitle": "Add a request",
+    "addHint": "For members without a smartphone.",
+    "number": "No.",
+    "orTitle": "or title",
+    "add": "Add to list",
+    "deferredTitle": "For next time",
+    "backToList": "Back to list",
+    "sungTitle": "Sung ({count})",
+    "limit": "Requests per person",
+    "fewer": "Fewer requests per person",
+    "more": "More requests per person",
+    "end": "End Song Service",
+    "endConfirm": "End Song Service? Members won't be able to send more requests.",
+    "keepGoing": "Keep going"
+  },
+  "songsAdmin": {
+    "title": "Song Service",
+    "needsSupabase": "Song Service needs the live database. Connect Supabase to use it.",
+    "startedBanner": "Song Service is live. Members can request songs now.",
+    "offError": "Song requests are switched off for this church.",
+    "nameError": "Enter the hymnal's name.",
+    "addedBanner": "{count, plural, =0 {Saved. No titles were found in the text.} one {Saved # title.} other {Saved # titles.}}",
+    "thisSabbath": "This Sabbath · {date}",
+    "choristerIs": "Chorister of the day: <b>{name}</b>",
+    "noChorister": "No chorister of the day yet",
+    "change": "Change",
+    "choose": "Choose",
+    "live": "Live",
+    "until": "Closes at {time}",
+    "openList": "Open the live list",
+    "end": "End Song Service",
+    "startBody": "Starting opens song requests and shows members \"Song Service is live\". The chorister of the day gets the live list.",
+    "endedBody": "Song Service has ended. You can start it again if you need to.",
+    "closeAfter": "Close automatically after",
+    "hours": "{count} hours",
+    "restart": "Start again",
+    "start": "Start Song Service",
+    "hymnals": "Hymnals",
+    "hymnalsNote": "Members request by hymn number. Add titles so they can search by name. Only numbers and titles are stored, never words or music.",
+    "lang": {
+      "en": "English",
+      "sw": "Kiswahili",
+      "other": "Other"
+    },
+    "titles": "{count, plural, =0 {No titles} one {# title} other {# titles}}",
+    "addTitles": "Add titles",
+    "pasteTitles": "Hymn titles",
+    "pasteHint": "One per line, number first, e.g. \"245 Title\". You can paste from a spreadsheet.",
+    "saveTitles": "Save titles",
+    "removeHymnal": "Remove hymnal",
+    "addHymnal": "Add a hymnal",
+    "hymnalName": "Hymnal name",
+    "language": "Language",
+    "enabled": "Song requests",
+    "enabledOn": "Members can request songs when Song Service is live.",
+    "enabledOff": "Switched off. Members can't request songs.",
+    "chorister": "Chorister of the day",
+    "addChorister": "Add chorister",
+    "choristerHint": "They lead Song Service this Sabbath. With their phone number, they get the live song list once an admin starts Song Service.",
+    "choristerName": "Name",
+    "choristerPhone": "Phone number",
+    "choristerPhoneHint": "The number they sign in with.",
+    "phoneError": "Enter a Kenyan mobile number, e.g. 0712 345 678.",
+    "saveChorister": "Save",
+    "recentChoristers": "Recent choristers",
+    "removeChorister": "Remove chorister",
+    "choristerSaved": "{name} is the chorister of the day",
+    "choristerRemoved": "Chorister removed"
   }
 }

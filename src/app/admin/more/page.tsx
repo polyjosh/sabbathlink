@@ -24,6 +24,12 @@ export default async function AdminMorePage() {
       nav={<AdminNav />}
     >
       <Group>
+        {can(admin, "programme.edit", church.id) && (
+          <RowLink href="/admin/songs">
+            <IconTile icon="music" tone="neutral" />
+            <p className={row}>{t("songs")}</p>
+          </RowLink>
+        )}
         {can(admin, "team.invite", church.id) && (
           <RowLink href="/admin/team">
             <IconTile icon="users" tone="neutral" />

@@ -8,8 +8,9 @@ import { ShareLink } from "@/components/church/ShareLink";
 import { BackButton } from "@/components/shell/BackButton";
 import { OfflineBanner } from "@/components/shell/OfflineBanner";
 import { Icon } from "@/components/ui/Icon";
-import { Avatar, Badge } from "@/components/ui/primitives";
+import { Avatar, Badge, Banner } from "@/components/ui/primitives";
 import { getChurch } from "@/lib/data";
+import { isSongServiceLive } from "@/lib/data/songs";
 import { SITE_URL } from "@/lib/programme";
 import { getFollowing } from "@/lib/session";
 
@@ -34,6 +35,7 @@ export default async function ChurchLayout({
   const tc = await getTranslations("common");
   const following = (await getFollowing()).includes(church.id);
   const verified = church.status === "verified";
+  const songLive = await isSongServiceLive(church.id);
 
   const header = (
     <div className="flex flex-col gap-2.5 px-4 pb-3">
@@ -86,6 +88,13 @@ export default async function ChurchLayout({
         header={header}
       />
       <OfflineBanner />
+      {songLive && (
+        <Link href={`/churches/${church.slug}/songs`} className="no-underline">
+          <Banner tone="success" icon="music" action={<Icon name="right" size={18} />}>
+            {t("songLive")}
+          </Banner>
+        </Link>
+      )}
       {children}
     </div>
   );
