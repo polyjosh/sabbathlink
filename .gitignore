@@ -14,3 +14,7 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 coverage/
+
+#claude files
+CLAUDE.md
+/.claude/

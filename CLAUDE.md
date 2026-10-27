@@ -14,7 +14,7 @@ Tagline: *Nearer to Thee.*
 - **Member**: has an account, follows a church, gives, requests transfers. Becomes a *verified member* only after the clerk confirms them.
 - **Church admin**: clerk, treasurer, communication leader, and other officers. Multiple admins per church, with role-based permissions.
 - **Chorister of the day**: a member assigned in the weekly programme who gets temporary control of the live Song Service for that Sabbath only. Access ends when the session closes.
-- **Platform admin**: SabbathLink staff who verify churches before they go live, and manage the platform and contact people through the platform admin panel (see below).
+- **Platform admin**: SabbathLink staff who verify churches before they go live.
 
 ## Product principles
 
@@ -26,7 +26,7 @@ Tagline: *Nearer to Thee.*
 
 ## Phase 1 (MVP) scope
 
-Build this first. Phase 1.5 (live song requests) is built alongside it; nothing from Phase 2 onward until Phase 1 is in use by pilot churches.
+Build this first, and nothing from later phases until Phase 1 is in use by pilot churches.
 
 - Church accounts and profiles: name, district/conference, location with map pin, service times, contacts, photos
 - Church verification by the platform admin before the church is public and before its payment details are visible
@@ -39,45 +39,17 @@ Build this first. Phase 1.5 (live song requests) is built alongside it; nothing 
 - Giving categories: tithe, offering, building fund, welfare, Local Church Budget, and **admins can add custom categories**
 - PWA, English and Swahili
 
-## Platform admin panel (super admin)
-
-A staff-only console at `/platform` for SabbathLink's own team (the **Platform admin** role). It is part of Phase 1, because churches can't go live until staff verify them.
-
-**Access and safeguards**
-- Only accounts listed in `platform_admins` can open it. The first platform admin is added by hand in the Supabase dashboard; after that, platform admins can add or remove others.
-- It works through the same database rules as the rest of the app: RLS policies grant platform admins read access across the platform, and every change goes through a database function that checks `is_platform_admin()` and writes the audit log. No service-role or secret key in the app.
-- Every view of a person's details and every change is written to `audit_log` with the staff member, the subject and the time. Platform admins can read the audit log; nobody can edit or delete it.
-- Religious affiliation is sensitive personal data: show phone numbers and follows only on a person's detail page (which is logged), never in bulk exports.
-- Platform admins never see or handle church money, and they can't add or change a church's payment numbers. They can only hide a church's giving details while a fraud report is investigated.
-
-**Screens**
-1. **Overview:** counts of churches by status, accounts, church admins, applications waiting, payment-number changes waiting; a list of applications to review, oldest first.
-2. **Churches:** search and filter by status; church detail with profile, service times, admin team, recent programmes, posts, giving details, application and its history.
-   Actions: verify, reject (with a reason), suspend and reinstate (hidden from the directory and giving hidden, with a reason), edit profile fields, remove an announcement or event, hide giving details, remove an admin or pass ownership when a church loses access.
-3. **People:** search accounts by phone or name; person detail with profile, churches followed, admin roles and messages sent to them.
-   Actions: remove an admin role, grant or remove platform admin.
-4. **Messages:** contact people.
-   - Audiences: one person, all admins of one church, all church admins, everyone who follows a church, or all accounts.
-   - Messages land in the person's in-app inbox (Me → Messages) with an unread count.
-   - SMS is queued alongside when chosen, and sent once an SMS provider (Africa's Talking) is connected; until then the panel says SMS is not set up. One-to-one, staff can also call, SMS or WhatsApp from their own phone using links on the person's page.
-   - Only service messages (verification, safety, account and product notices). Marketing messages need the person's opt-in first, and every SMS must say how to stop them.
-5. **Audit log:** filterable by staff member, church and action.
-
-**Data model additions:** `platform_admins` (name, added by, added at); church `suspended` status plus status reason and `giving_hidden` flag; `messages` (sender, audience, title, body, channels, sent at) and `message_recipients` (message, person, read at, SMS status), filled in one step when a message is sent. Verification letters go to the private `church-letters` storage bucket (in a folder per applicant); only platform admins and the uploader can read them, and staff open them through short-lived links on the church page.
-
-**Build order:** schema and permissions with tests against the database → overview and church verification → churches and people screens → messages and the member inbox → audit log screen.
-
 ## Phase 1.5: Live song requests
 
-Members request songs **during Song Service**, which is led by the **Chorister of the day**. This is a live, in-service feature, not an advance queue.
+Build after the MVP is in use. Members request songs **during Song Service**, which is led by the **Chorister of the day**. This is a live, in-service feature, not an advance queue.
 
 **Flow**
-1. Every Sabbath, the admin creating the weekly programme selects the Chorister of the day (name and phone number). That person gets temporary Song Service permissions for that Sabbath.
-2. On the day, an admin taps **Start Song Service**, which activates the live session. Requests open and members of that church see a "Song Service is live" banner.
+1. The clerk or music leader assigns the Chorister of the day in the weekly programme. That person gets temporary Song Service permissions for that Sabbath.
+2. The chorister taps **Start Song Service**. Requests open and members of that church see a "Song Service is live" banner.
 3. Members tap **Request a song**, enter the **hymn number** on a number keypad (or search by title), and send. Two or three taps, with no typing beyond the number.
 4. The chorister sees a live list: hymn number and title, request count, and the requester's name unless anonymous.
 5. The chorister taps **Next** (members see "Now singing: Hymn 245") and **Sung** (members see a tick on their request).
-6. The chorister or an admin taps **End Song Service**. The session also closes automatically after a set time.
+6. The chorister taps **End Song Service**. The session also closes automatically after a set time.
 
 **Chorister controls:** reorder or sort (order received or most requested); auto-merge duplicates ("requested by 5"); defer a request with a gentle "We'll sing it next time", never a rejection; add a request manually for members without smartphones; pause or close requests; per-person limit per session (default 2).
 
@@ -185,4 +157,4 @@ Ask before introducing heavy dependencies or switching stack choices.
 5. Build the directory, search, "near me", church detail page, and follow.
 6. Build the display-only giving section with copy buttons and custom categories.
 7. Add English and Swahili translations, then a deployment and pilot setup.
-8. Build Phase 1.5 live song requests: Chorister of the day chosen in the programme, admin session start/end, member hymn-number request, chorister live list, and the real-time "Now singing" banner.
+8. After the pilot has started, build Phase 1.5 live song requests: Chorister of the day role, session start/end, member hymn-number request, chorister live list, and the real-time "Now singing" banner.
